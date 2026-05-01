@@ -1,13 +1,16 @@
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from openai import OpenAI
 from dotenv import load_dotenv
+from pathlib import Path
 import os
 import tempfile
-from pathlib import Path
-from fastapi.responses import FileResponse
+import json
+
+from knowledge_db import load_json_to_db, search_knowledge
 
 load_dotenv()
 
@@ -25,30 +28,70 @@ app.add_middleware(
 
 app.mount("/audio", StaticFiles(directory="."), name="audio")
 
+try:
+    load_json_to_db()
+except Exception as e:
+    print(f"Knowledge database load skipped/error: {e}")
 
-# =========================
-# MODELS
-# =========================
+
 class ChatRequest(BaseModel):
     message: str
     personality: str = "calm_strategist"
     mode: str = "general"
 
 
-# =========================
-# AI RESPONSE
-# =========================
+def build_knowledge_context(user_message: str) -> str:
+    try:
+        results = search_knowledge(user_message)
+
+        if not results:
+            return ""
+
+        context_parts = []
+
+        for item in results[:3]:
+            content = item.get("content", {})
+
+            context_parts.append(
+                f"""
+Game: {item.get("game")}
+Section: {item.get("section")}
+Title: {item.get("title")}
+
+Knowledge:
+{json.dumps(content, indent=2, ensure_ascii=False)}
+"""
+            )
+
+        return "\n\n".join(context_parts)
+
+    except Exception as e:
+        print(f"Knowledge search error: {e}")
+        return ""
+
+
 def generate_response(
     message: str,
     personality: str = "calm_strategist",
     mode: str = "general",
 ):
-    system_prompt = (
-        "You are SYNK, a helpful holographic AI sidekick. "
-        "Always respond in English. "
-        f"Personality: {personality}. Mode: {mode}. "
-        "Keep responses clear, useful, and conversational."
-    )
+    knowledge_context = build_knowledge_context(message)
+
+    system_prompt = f"""
+You are SYNK, a helpful holographic AI sidekick.
+
+Always respond in English.
+Personality: {personality}.
+Mode: {mode}.
+
+Use the knowledge below when it is relevant.
+If the knowledge does not answer the user's question, answer normally.
+
+Keep responses clear, useful, and conversational.
+
+KNOWLEDGE:
+{knowledge_context}
+"""
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -62,9 +105,6 @@ def generate_response(
     return content.strip() if content else "I heard you, but I could not generate a response."
 
 
-# =========================
-# UTILITY
-# =========================
 def extension_from_filename(filename: str | None):
     if not filename:
         return ".webm"
@@ -73,16 +113,24 @@ def extension_from_filename(filename: str | None):
     return suffix if suffix else ".webm"
 
 
-# =========================
-# ROUTES
-# =========================
-
 @app.get("/")
 def root():
     return {"message": "SYNK backend online"}
 
 
-# 🔥 REALTIME SESSION (FIXED + ENGLISH)
+@app.get("/knowledge/search")
+async def knowledge_search(q: str):
+    try:
+        results = search_knowledge(q)
+        return {
+            "query": q,
+            "results": results,
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.get("/realtime/session")
 def realtime_session():
     try:
@@ -181,7 +229,6 @@ async def voice(
             os.remove(temp_path)
 
 
-# 🔊 TEXT TO SPEECH
 @app.post("/tts")
 async def tts(text: str = Form(...)):
     try:
