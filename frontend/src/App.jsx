@@ -24,15 +24,12 @@ export default function App() {
       setAvatarState("thinking");
       setStatusText("Connecting realtime voice...");
 
-     const sessionRes = await fetch(
-  "https://sidekick-p0n2.onrender.com/realtime/session",
-  {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }
-);S
+      const sessionRes = await fetch(
+        "https://sidekick-p0n2.onrender.com/realtime/session",
+        {
+          method: "GET",
+        }
+      );
 
       if (!sessionRes.ok) {
         const errorText = await sessionRes.text();
@@ -40,12 +37,11 @@ export default function App() {
       }
 
       const sessionData = await sessionRes.json();
-
       const ephemeralKey = sessionData.value;
 
-if (!ephemeralKey) {
-  throw new Error("No realtime client secret returned.");
-}
+      if (!ephemeralKey) {
+        throw new Error("No realtime client secret returned.");
+      }
 
       const pc = new RTCPeerConnection();
       pcRef.current = pc;
