@@ -41,14 +41,11 @@ export default function App() {
 
       const sessionData = await sessionRes.json();
 
-      const ephemeralKey =
-        sessionData?.value ||
-        sessionData?.client_secret?.value ||
-        sessionData?.client_secret;
+      const ephemeralKey = sessionData.value;
 
-      if (!ephemeralKey) {
-        throw new Error("No realtime client secret returned.");
-      }
+if (!ephemeralKey) {
+  throw new Error("No realtime client secret returned.");
+}
 
       const pc = new RTCPeerConnection();
       pcRef.current = pc;
