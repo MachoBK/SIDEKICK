@@ -24,15 +24,15 @@ export default function App() {
       setAvatarState("thinking");
       setStatusText("Connecting realtime voice...");
 
-      const sessionRes = await fetch(
-        "https://clang-gander-kite.ngrok-free.dev/realtime/session",
-        {
-          method: "GET",
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
-        }
-      );
+     const sessionRes = await fetch(
+  "https://sidekick-p0n2.onrender.com/realtime/session",
+  {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }
+);S
 
       if (!sessionRes.ok) {
         const errorText = await sessionRes.text();
