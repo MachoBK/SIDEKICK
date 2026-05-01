@@ -1,152 +1,352 @@
-{
-  "id": "crimson_desert_prologue_guide",
-  "type": "game_guide",
-  "game": "Crimson Desert",
-  "section": "Prologue",
-  "title": "Dead of Night",
-  "character": "Kliff",
-  "world": "Pywel",
-
-  "overview": "The Prologue introduces Kliff, a leader of the Greymanes, as his group is ambushed by the Black Bears. After being defeated and thrown into a river, he survives through a mysterious experience in the Abyss and begins a new journey.",
-
-  "factions": [
-    {
-      "name": "Greymanes",
-      "description": "Warriors who protect Pailune, composed of skilled individuals from diverse backgrounds."
-    },
-    {
-      "name": "Black Bears",
-      "description": "A brutal rival faction led by Myurdin, driven by power and destruction."
-    }
-  ],
-
-  "characters": [
-    {
-      "name": "Kliff",
-      "role": "Protagonist",
-      "traits": ["strategic", "skilled swordsman", "leader"]
-    },
-    {
-      "name": "Myurdin",
-      "role": "Antagonist",
-      "traits": ["brutal", "power-driven"]
-    },
-    {
-      "name": "Oongka",
-      "role": "Ally",
-      "traits": ["strong", "loyal"]
-    },
-    {
-      "name": "Naira",
-      "role": "Ally",
-      "traits": ["archer", "survival expert"]
-    },
-    {
-      "name": "Yann",
-      "role": "Ally",
-      "traits": ["reckless", "skilled"]
-    },
-    {
-      "name": "Sebastian",
-      "role": "NPC",
-      "traits": ["rescuer", "guide"]
-    }
-  ],
-
-  "quests": [
-    {
-      "name": "Unfamiliar Lands",
-      "location": "Hills of No Return",
-      "objectives": [
-        "Go to the cabin",
-        "Speak with companions",
-        "Enter the hut",
-        "Defend against ambush"
-      ],
-      "outcome": "Black Bears attack, initiating combat tutorial."
-    },
-    {
-      "name": "In Ashes",
-      "location": "Nas River",
-      "objectives": [
-        "Defeat enemies",
-        "Protect allies",
-        "Fight Myurdin"
-      ],
-      "outcome": "Kliff is defeated and thrown into the river."
-    },
-    {
-      "name": "Realm of Uncertainty",
-      "location": "Corridor of the Void",
-      "objectives": [
-        "Navigate the corridor",
-        "Complete movement challenges"
-      ],
-      "outcome": "Kliff survives and gains mysterious power."
-    },
-    {
-      "name": "New Journey",
-      "location": "Tree Saints’ Falls",
-      "objectives": [
-        "Recover",
-        "Travel with Sebastian",
-        "Defeat bandits",
-        "Reach encampment"
-      ],
-      "outcome": "Prologue ends and Chapter 1 begins."
-    }
-  ],
-
-  "locations": [
-    {
-      "name": "Hills of No Return",
-      "description": "Starting forest region near the Greymanes camp."
-    },
-    {
-      "name": "Nas River",
-      "description": "River where Kliff is thrown and survives."
-    },
-    {
-      "name": "Corridor of the Void",
-      "description": "Mysterious realm between life and death."
-    },
-    {
-      "name": "Tree Saints’ Falls",
-      "description": "Location where Kliff recovers after the Abyss."
-    },
-    {
-      "name": "Freesword Encampment",
-      "description": "Safe zone marking the end of the Prologue."
-    }
-  ],
-
-  "gameplay_systems": [
-    "combat basics",
-    "movement mechanics",
-    "enemy encounters",
-    "mini-map navigation",
-    "mount system",
-    "environment traversal"
-  ],
-
-  "themes": [
-    "survival",
-    "betrayal",
-    "power",
-    "death and rebirth",
-    "destiny"
-  ],
-
-  "timeline": [
-    "Kliff starts in wilderness",
-    "Meets Greymanes",
-    "Ambush occurs",
-    "Battle escalates",
-    "Defeated by Myurdin",
-    "Falls into river",
-    "Enters Abyss",
-    "Escapes with power",
-    "Rescued by Sebastian",
-    "Begins new journey"
-  ]
-}
+[
+  {
+    "id": "crimson_desert_prologue_guide",
+    "type": "game_guide",
+    "game": "Crimson Desert",
+    "section": "Prologue",
+    "title": "Dead of Night",
+    "character": "Kliff",
+    "world": "Pywel",
+    "overview": "The Prologue introduces Kliff, a leader of the Greymanes, as his group is ambushed by the Black Bears. After being defeated and thrown into a river, he survives through a mysterious experience in the Abyss and begins a new journey.",
+    "factions": [
+      {
+        "name": "Greymanes",
+        "description": "Warriors who protect Pailune, composed of skilled individuals from diverse backgrounds."
+      },
+      {
+        "name": "Black Bears",
+        "description": "A brutal rival faction led by Myurdin, driven by power and destruction."
+      }
+    ],
+    "characters": [
+      {
+        "name": "Kliff",
+        "role": "Protagonist",
+        "traits": ["strategic", "skilled swordsman", "leader"]
+      },
+      {
+        "name": "Myurdin",
+        "role": "Antagonist",
+        "traits": ["brutal", "power-driven"]
+      },
+      {
+        "name": "Oongka",
+        "role": "Ally",
+        "traits": ["strong", "loyal"]
+      },
+      {
+        "name": "Naira",
+        "role": "Ally",
+        "traits": ["archer", "survival expert"]
+      },
+      {
+        "name": "Yann",
+        "role": "Ally",
+        "traits": ["reckless", "skilled"]
+      },
+      {
+        "name": "Sebastian",
+        "role": "NPC",
+        "traits": ["rescuer", "guide"]
+      }
+    ],
+    "quests": [
+      {
+        "name": "Unfamiliar Lands",
+        "location": "Hills of No Return",
+        "objectives": [
+          "Go to the cabin",
+          "Speak with companions",
+          "Enter the hut",
+          "Defend against ambush"
+        ],
+        "outcome": "Black Bears attack, initiating combat tutorial."
+      },
+      {
+        "name": "In Ashes",
+        "location": "Nas River",
+        "objectives": ["Defeat enemies", "Protect allies", "Fight Myurdin"],
+        "outcome": "Kliff is defeated and thrown into the river."
+      },
+      {
+        "name": "Realm of Uncertainty",
+        "location": "Corridor of the Void",
+        "objectives": ["Navigate the corridor", "Complete movement challenges"],
+        "outcome": "Kliff survives and gains mysterious power."
+      },
+      {
+        "name": "New Journey",
+        "location": "Tree Saints’ Falls",
+        "objectives": [
+          "Recover",
+          "Travel with Sebastian",
+          "Defeat bandits",
+          "Reach encampment"
+        ],
+        "outcome": "Prologue ends and Chapter 1 begins."
+      }
+    ],
+    "locations": [
+      {
+        "name": "Hills of No Return",
+        "description": "Starting forest region near the Greymanes camp."
+      },
+      {
+        "name": "Nas River",
+        "description": "River where Kliff is thrown and survives."
+      },
+      {
+        "name": "Corridor of the Void",
+        "description": "Mysterious realm between life and death."
+      },
+      {
+        "name": "Tree Saints’ Falls",
+        "description": "Location where Kliff recovers after the Abyss."
+      },
+      {
+        "name": "Freesword Encampment",
+        "description": "Safe zone marking the end of the Prologue."
+      }
+    ],
+    "gameplay_systems": [
+      "combat basics",
+      "movement mechanics",
+      "enemy encounters",
+      "mini-map navigation",
+      "mount system",
+      "environment traversal"
+    ],
+    "themes": [
+      "survival",
+      "betrayal",
+      "power",
+      "death and rebirth",
+      "destiny"
+    ],
+    "timeline": [
+      "Kliff starts in wilderness",
+      "Meets Greymanes",
+      "Ambush occurs",
+      "Battle escalates",
+      "Defeated by Myurdin",
+      "Falls into river",
+      "Enters Abyss",
+      "Escapes with power",
+      "Rescued by Sebastian",
+      "Begins new journey"
+    ]
+  },
+  {
+    "id": "crimson_desert_chapter_1_hernand_town",
+    "type": "game_guide",
+    "game": "Crimson Desert",
+    "section": "Chapter 1",
+    "title": "The First Encounter - Hernand Town",
+    "character": "Kliff",
+    "world": "Pywel",
+    "overview": "Chapter 1 begins after Kliff reaches Hernand Town at the end of the Prologue. Pywel begins opening up, but the best route is to stay focused on the main story until Kliff gains more core abilities.",
+    "recommended_path": "Do not fully explore Hernand Town yet. Follow the Chapter 1 main quest chain first. Save deeper exploration for Chapter 2.",
+    "main_quest_chain": [
+      "Where Rumors Gather",
+      "Mysterious Man",
+      "True Wisdom in Kindness",
+      "Heart Beyond Borders",
+      "Actions Speak Louder Than Words",
+      "Mystical Key"
+    ],
+    "quests": [
+      {
+        "name": "Where Rumors Gather",
+        "location": "Freesword Encampment / Hernand Tavern",
+        "objectives": [
+          "Check the Freesword Encampment",
+          "Use the bed and storage if needed",
+          "Cook at the bonfire",
+          "Activate the Abyss Nexus",
+          "Ring the Bell Tower bell",
+          "Enter Hernand Tavern",
+          "Speak with Dahlia"
+        ],
+        "outcome": "Kliff begins Chapter 1 and learns important town systems."
+      },
+      {
+        "name": "Mysterious Man",
+        "location": "Near Hernand Sewers",
+        "objectives": [
+          "Leave Hernand Tavern",
+          "Find the sleeping beggar near the sewer entrance",
+          "Give him a coin"
+        ],
+        "reward": "Shabby Wooden Key",
+        "outcome": "The beggar vanishes mysteriously, revealing the event as part of a supernatural trial."
+      },
+      {
+        "name": "True Wisdom in Kindness",
+        "location": "Hernand Sewers",
+        "objectives": [
+          "Enter the sewers",
+          "Loot the chest",
+          "Practice Precision Jumping",
+          "Free the tied-up Noble Woman"
+        ],
+        "reward": "Sealed Letter",
+        "outcome": "Another mystical kindness trial is completed."
+      },
+      {
+        "name": "Heart Beyond Borders",
+        "location": "Near the Bell Tower",
+        "objectives": [
+          "Speak with Rulupee",
+          "Climb onto the roof",
+          "Rescue the black cat",
+          "Return the cat to Rulupee"
+        ],
+        "reward": "Shai’s Pendant",
+        "outcome": "Kliff helps Rulupee and earns another quest item."
+      },
+      {
+        "name": "Actions Speak Louder Than Words",
+        "location": "Muckroot Ranch",
+        "objectives": [
+          "Find the smoking house",
+          "Pick up the broom",
+          "Climb to the roof",
+          "Clean the blocked chimney",
+          "Speak with Arlan"
+        ],
+        "rewards": ["Inventory Expansion", "Hernandian Attire"],
+        "outcome": "Kliff receives clothing needed to enter Hernand Castle."
+      },
+      {
+        "name": "Mystical Key",
+        "location": "Hernand Castle / Alchemist’s Chamber",
+        "objectives": [
+          "Inspect the Shabby Wooden Key",
+          "Equip Hernandian Attire",
+          "Enter Hernand Castle",
+          "Reach the locked chamber on the second floor",
+          "Unlock the Alchemist’s Chamber",
+          "Open the treasure chest",
+          "Use the Lantern",
+          "Enter the Abyss Gate"
+        ],
+        "rewards": ["Abyss Artifact", "Faded Abyss Artifact"],
+        "outcome": "Kliff discovers the first Abyss Gate and travels to the Axiom Archive."
+      }
+    ],
+    "locations": [
+      {
+        "name": "Freesword Encampment",
+        "description": "Starting area for Chapter 1 near Hernand Castle. Contains a bed, storage, bonfire, animals, and NPCs."
+      },
+      {
+        "name": "Abyss Nexus",
+        "description": "Fast travel point that should be activated when entering a new area."
+      },
+      {
+        "name": "Bell Tower",
+        "description": "Tower used to reveal surrounding map information and nearby points of interest."
+      },
+      {
+        "name": "Hernand Tavern",
+        "description": "Main quest destination where Kliff speaks with Dahlia and can play Arm Wrestling."
+      },
+      {
+        "name": "Hernand Sewers",
+        "description": "Small hidden area containing early gear, items, and a kindness trial."
+      },
+      {
+        "name": "Muckroot Ranch",
+        "description": "Location of the smoking house where Kliff helps Arlan and Lauren."
+      },
+      {
+        "name": "Hernand Castle",
+        "description": "Castle that Kliff can enter after equipping Hernandian Attire."
+      },
+      {
+        "name": "Alchemist’s Chamber",
+        "description": "Locked room opened with the Mystical Key. Contains Abyss rewards and an Abyss Gate."
+      },
+      {
+        "name": "Axiom Archive",
+        "description": "Abyss destination reached from the gate in the Alchemist’s Chamber."
+      }
+    ],
+    "systems_introduced": [
+      {
+        "name": "Abyss Nexus",
+        "description": "Fast travel point. Activate it by standing on it, then use it from the map later."
+      },
+      {
+        "name": "Bells",
+        "description": "Map-revealing towers. Ringing a bell clears nearby fog of war and reveals points of interest."
+      },
+      {
+        "name": "Faction Quests",
+        "description": "Optional reputation-based missions tied to groups across Pywel."
+      },
+      {
+        "name": "Notice Boards",
+        "description": "Boards that offer bounties, commissions, vendor leads, and clue-based tasks."
+      },
+      {
+        "name": "Abyss Gate",
+        "description": "One-way portal from Pywel into the Abyss."
+      },
+      {
+        "name": "Abyss Artifact",
+        "description": "Used to gain Skill Points or improve stats such as Health, Stamina, and Spirit."
+      },
+      {
+        "name": "Faded Abyss Artifact",
+        "description": "Respec item that lets Kliff reset the skill tree."
+      },
+      {
+        "name": "Hidden Spaces",
+        "description": "Secret areas containing trials, gear, puzzles, or lore."
+      },
+      {
+        "name": "Memory Fragments",
+        "description": "Past visions triggered with the Visione helmet."
+      },
+      {
+        "name": "Learn Skill",
+        "description": "Some abilities are learned by observing Echoes, NPCs, or enemies."
+      },
+      {
+        "name": "Mounts",
+        "description": "Permanent rideable creatures and machines such as horses, dragons, wyverns, raptors, and mechs."
+      },
+      {
+        "name": "Minigames",
+        "description": "Optional activities including tavern games and combat challenges."
+      }
+    ],
+    "minigames": [
+      {
+        "name": "Arm Wrestling",
+        "location": "Hernand Tavern",
+        "steps": [
+          "Start the match",
+          "Wait for the countdown",
+          "Tap the action key repeatedly",
+          "Watch the timing circle",
+          "Press the timing key when the needle reaches the highlighted area",
+          "Repeat until the opponent loses"
+        ],
+        "outcome": "Winning gives Kliff early money and introduces tavern minigames."
+      }
+    ],
+    "important_rewards": [
+      "Shabby Wooden Key",
+      "Helmet",
+      "Sealed Letter",
+      "Shai’s Pendant",
+      "Inventory Expansion",
+      "Hernandian Attire",
+      "Abyss Artifact",
+      "Faded Abyss Artifact"
+    ],
+    "summary": "Chapter 1 starts in Hernand Town after the Prologue. It introduces fast travel, map bells, reputation, minigames, hidden spaces, disguises, and Abyss mechanics. The Trials of Kindness questline tests Kliff through helpful actions and eventually leads him into Hernand Castle, the Alchemist’s Chamber, and the first Abyss Gate."
+  }
+]
