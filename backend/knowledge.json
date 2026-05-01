@@ -1,0 +1,152 @@
+{
+  "id": "crimson_desert_prologue_guide",
+  "type": "game_guide",
+  "game": "Crimson Desert",
+  "section": "Prologue",
+  "title": "Dead of Night",
+  "character": "Kliff",
+  "world": "Pywel",
+
+  "overview": "The Prologue introduces Kliff, a leader of the Greymanes, as his group is ambushed by the Black Bears. After being defeated and thrown into a river, he survives through a mysterious experience in the Abyss and begins a new journey.",
+
+  "factions": [
+    {
+      "name": "Greymanes",
+      "description": "Warriors who protect Pailune, composed of skilled individuals from diverse backgrounds."
+    },
+    {
+      "name": "Black Bears",
+      "description": "A brutal rival faction led by Myurdin, driven by power and destruction."
+    }
+  ],
+
+  "characters": [
+    {
+      "name": "Kliff",
+      "role": "Protagonist",
+      "traits": ["strategic", "skilled swordsman", "leader"]
+    },
+    {
+      "name": "Myurdin",
+      "role": "Antagonist",
+      "traits": ["brutal", "power-driven"]
+    },
+    {
+      "name": "Oongka",
+      "role": "Ally",
+      "traits": ["strong", "loyal"]
+    },
+    {
+      "name": "Naira",
+      "role": "Ally",
+      "traits": ["archer", "survival expert"]
+    },
+    {
+      "name": "Yann",
+      "role": "Ally",
+      "traits": ["reckless", "skilled"]
+    },
+    {
+      "name": "Sebastian",
+      "role": "NPC",
+      "traits": ["rescuer", "guide"]
+    }
+  ],
+
+  "quests": [
+    {
+      "name": "Unfamiliar Lands",
+      "location": "Hills of No Return",
+      "objectives": [
+        "Go to the cabin",
+        "Speak with companions",
+        "Enter the hut",
+        "Defend against ambush"
+      ],
+      "outcome": "Black Bears attack, initiating combat tutorial."
+    },
+    {
+      "name": "In Ashes",
+      "location": "Nas River",
+      "objectives": [
+        "Defeat enemies",
+        "Protect allies",
+        "Fight Myurdin"
+      ],
+      "outcome": "Kliff is defeated and thrown into the river."
+    },
+    {
+      "name": "Realm of Uncertainty",
+      "location": "Corridor of the Void",
+      "objectives": [
+        "Navigate the corridor",
+        "Complete movement challenges"
+      ],
+      "outcome": "Kliff survives and gains mysterious power."
+    },
+    {
+      "name": "New Journey",
+      "location": "Tree Saints’ Falls",
+      "objectives": [
+        "Recover",
+        "Travel with Sebastian",
+        "Defeat bandits",
+        "Reach encampment"
+      ],
+      "outcome": "Prologue ends and Chapter 1 begins."
+    }
+  ],
+
+  "locations": [
+    {
+      "name": "Hills of No Return",
+      "description": "Starting forest region near the Greymanes camp."
+    },
+    {
+      "name": "Nas River",
+      "description": "River where Kliff is thrown and survives."
+    },
+    {
+      "name": "Corridor of the Void",
+      "description": "Mysterious realm between life and death."
+    },
+    {
+      "name": "Tree Saints’ Falls",
+      "description": "Location where Kliff recovers after the Abyss."
+    },
+    {
+      "name": "Freesword Encampment",
+      "description": "Safe zone marking the end of the Prologue."
+    }
+  ],
+
+  "gameplay_systems": [
+    "combat basics",
+    "movement mechanics",
+    "enemy encounters",
+    "mini-map navigation",
+    "mount system",
+    "environment traversal"
+  ],
+
+  "themes": [
+    "survival",
+    "betrayal",
+    "power",
+    "death and rebirth",
+    "destiny"
+  ],
+
+  "timeline": [
+    "Kliff starts in wilderness",
+    "Meets Greymanes",
+    "Ambush occurs",
+    "Battle escalates",
+    "Defeated by Myurdin",
+    "Falls into river",
+    "Enters Abyss",
+    "Escapes with power",
+    "Rescued by Sebastian",
+    "Begins new journey"
+  ]
+}
