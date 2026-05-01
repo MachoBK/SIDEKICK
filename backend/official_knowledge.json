@@ -1,0 +1,828 @@
+{
+  "game": "Crimson Desert",
+  "generated_at": "2026-04-04T13:51:07.326330+00:00",
+  "record_count": 42,
+  "sources_checked": 5,
+  "source_stats": [
+    {
+      "source_name": "main_story",
+      "kind": "story",
+      "url": "https://crimsondesert.pearlabyss.com/en-us/Main",
+      "records_found": 9,
+      "status": "ok"
+    },
+    {
+      "source_name": "game_editions",
+      "kind": "items",
+      "url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=49",
+      "records_found": 10,
+      "status": "ok"
+    },
+    {
+      "source_name": "patch_1_00_03",
+      "kind": "patch",
+      "url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=73",
+      "records_found": 9,
+      "status": "ok"
+    },
+    {
+      "source_name": "patch_1_01_00",
+      "kind": "patch",
+      "url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=76",
+      "records_found": 10,
+      "status": "ok"
+    },
+    {
+      "source_name": "patch_1_02_00",
+      "kind": "patch",
+      "url": "https://crimsondesert.pearlabyss.com/en-US/News/Notice/Detail?_boardNo=80",
+      "records_found": 10,
+      "status": "ok"
+    }
+  ],
+  "records": [
+    {
+      "id": "ability_double_boost",
+      "name": "Double Boost",
+      "category": "ability",
+      "description": "Officially named horse ability mentioned in patch notes.",
+      "aliases": [
+        "Double Boost"
+      ],
+      "tags": [
+        "ability",
+        "mount"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_02_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-US/News/Notice/Detail?_boardNo=80",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "character_damiane",
+      "name": "Damiane",
+      "category": "character",
+      "description": "Officially named character mentioned in official notices.",
+      "aliases": [
+        "Damiane"
+      ],
+      "tags": [
+        "character"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_00_03",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=73",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "character_kliff",
+      "name": "Kliff",
+      "category": "character",
+      "description": "Officially named character found on the main Crimson Desert story page: Kliff.",
+      "aliases": [
+        "Kliff"
+      ],
+      "tags": [
+        "lead",
+        "protagonist"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "main_story",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/Main",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "character_myurdin",
+      "name": "Myurdin",
+      "category": "character",
+      "description": "Officially named character found on the main Crimson Desert story page: Myurdin.",
+      "aliases": [
+        "Myurdin"
+      ],
+      "tags": [
+        "character"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "main_story",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/Main",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "character_naira",
+      "name": "Naira",
+      "category": "character",
+      "description": "Officially named character found on the main Crimson Desert story page: Naira.",
+      "aliases": [
+        "Naira"
+      ],
+      "tags": [
+        "character"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "main_story",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/Main",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "character_oongka",
+      "name": "Oongka",
+      "category": "character",
+      "description": "Officially named character found on the main Crimson Desert story page: Oongka.",
+      "aliases": [
+        "Oongka"
+      ],
+      "tags": [
+        "character"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "main_story",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/Main",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "character_yann",
+      "name": "Yann",
+      "category": "character",
+      "description": "Officially named character found on the main Crimson Desert story page: Yann.",
+      "aliases": [
+        "Yann"
+      ],
+      "tags": [
+        "character"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "main_story",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/Main",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "faction_black_bears",
+      "name": "Black Bears",
+      "category": "faction",
+      "description": "Officially named faction found on the main Crimson Desert story page: Black Bears.",
+      "aliases": [
+        "Black Bears"
+      ],
+      "tags": [
+        "enemy",
+        "faction"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "main_story",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/Main",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "faction_greymanes",
+      "name": "Greymanes",
+      "category": "faction",
+      "description": "Officially named faction found on the main Crimson Desert story page: Greymanes.",
+      "aliases": [
+        "Greymanes"
+      ],
+      "tags": [
+        "allies",
+        "faction"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "main_story",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/Main",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "gear_balgran_shield",
+      "name": "Balgran Shield",
+      "category": "gear",
+      "description": "Officially named edition or pre-order item: Balgran Shield.",
+      "aliases": [
+        "Balgran Shield"
+      ],
+      "tags": [
+        "edition",
+        "shield"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "game_editions",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=49",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "gear_bekker_shield",
+      "name": "Bekker Shield",
+      "category": "gear",
+      "description": "Officially named shield/item mentioned in patch notes.",
+      "aliases": [
+        "Bekker Shield"
+      ],
+      "tags": [
+        "gear",
+        "shield"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_00_03",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=73",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "gear_constellation_helm",
+      "name": "Constellation Helm",
+      "category": "gear",
+      "description": "Officially named gear mentioned in known issues.",
+      "aliases": [
+        "Constellation Helm"
+      ],
+      "tags": [
+        "gear",
+        "helm"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_01_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=76",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "gear_exclaire_horse_tack_set",
+      "name": "Exclaire Horse Tack Set",
+      "category": "gear",
+      "description": "Officially named edition or pre-order item: Exclaire Horse Tack Set.",
+      "aliases": [
+        "Exclaire Horse Tack Set"
+      ],
+      "tags": [
+        "edition",
+        "horse",
+        "mount"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "game_editions",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=49",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "gear_grotevant_plate_set",
+      "name": "Grotevant Plate Set",
+      "category": "gear",
+      "description": "Officially named edition or pre-order item: Grotevant Plate Set.",
+      "aliases": [
+        "Grotevant Plate Set"
+      ],
+      "tags": [
+        "armor",
+        "edition"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "game_editions",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=49",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "gear_hyperion_horse_tack_set",
+      "name": "Hyperion Horse Tack Set",
+      "category": "gear",
+      "description": "Officially named edition or pre-order item: Hyperion Horse Tack Set.",
+      "aliases": [
+        "Hyperion Horse Tack Set"
+      ],
+      "tags": [
+        "edition",
+        "horse",
+        "mount"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "game_editions",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=49",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "gear_kairos_plate_set",
+      "name": "Kairos Plate Set",
+      "category": "gear",
+      "description": "Officially named edition or pre-order item: Kairos Plate Set.",
+      "aliases": [
+        "Kairos Plate Set"
+      ],
+      "tags": [
+        "armor",
+        "edition"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "game_editions",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=49",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "gear_khaled_shield",
+      "name": "Khaled Shield",
+      "category": "gear",
+      "description": "Officially named edition or pre-order item: Khaled Shield.",
+      "aliases": [
+        "Khaled Shield"
+      ],
+      "tags": [
+        "edition",
+        "shield"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "game_editions",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=49",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "item_abyss_artifact",
+      "name": "Abyss Artifact",
+      "category": "item",
+      "description": "Officially named item or system object mentioned in patch notes.",
+      "aliases": [
+        "Abyss Artifact"
+      ],
+      "tags": [
+        "item"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_02_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-US/News/Notice/Detail?_boardNo=80",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "item_refinement_token",
+      "name": "Refinement Token",
+      "category": "item",
+      "description": "Officially named item mentioned in patch notes or known issues.",
+      "aliases": [
+        "Refinement Token"
+      ],
+      "tags": [
+        "item"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_01_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=76",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "item_shroud_lantern",
+      "name": "Shroud Lantern",
+      "category": "item",
+      "description": "Officially named edition or pre-order item: Shroud Lantern.",
+      "aliases": [
+        "Shroud Lantern"
+      ],
+      "tags": [
+        "edition",
+        "item"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "game_editions",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=49",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "location_demeniss_castle",
+      "name": "Demeniss Castle",
+      "category": "location",
+      "description": "Officially named location mentioned in patch notes.",
+      "aliases": [
+        "Demeniss Castle"
+      ],
+      "tags": [
+        "castle",
+        "location"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_02_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-US/News/Notice/Detail?_boardNo=80",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "location_hernand",
+      "name": "Hernand",
+      "category": "location",
+      "description": "Officially named location mentioned in patch notes.",
+      "aliases": [
+        "Hernand"
+      ],
+      "tags": [
+        "location"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_00_03",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=73",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "location_howling_hill_camp",
+      "name": "Howling Hill Camp",
+      "category": "location",
+      "description": "Officially named location or camp mentioned in patch notes.",
+      "aliases": [
+        "Howling Hill Camp"
+      ],
+      "tags": [
+        "camp",
+        "location"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_00_03",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=73",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "minigame_duo",
+      "name": "Duo",
+      "category": "minigame",
+      "description": "Officially named minigame mentioned in patch notes.",
+      "aliases": [
+        "Duo"
+      ],
+      "tags": [
+        "minigame"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_00_03",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=73",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "mount_icicle_edge_alpine_ibex",
+      "name": "Icicle Edge Alpine Ibex",
+      "category": "mount",
+      "description": "Officially named mount mentioned in official patch notes or known issues: Icicle Edge Alpine Ibex.",
+      "aliases": [
+        "Icicle Edge Alpine Ibex"
+      ],
+      "tags": [
+        "mount"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_01_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=76",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "mount_rock_tusk_warthog",
+      "name": "Rock Tusk Warthog",
+      "category": "mount",
+      "description": "Officially named mount mentioned in official patch notes or known issues: Rock Tusk Warthog.",
+      "aliases": [
+        "Rock Tusk Warthog"
+      ],
+      "tags": [
+        "mount"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_01_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=76",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "mount_silver_fang",
+      "name": "Silver Fang",
+      "category": "mount",
+      "description": "Officially named mount mentioned in official patch notes or known issues: Silver Fang.",
+      "aliases": [
+        "Silver Fang"
+      ],
+      "tags": [
+        "mount"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_01_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=76",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "mount_snowwhite_deer",
+      "name": "Snowwhite Deer",
+      "category": "mount",
+      "description": "Officially named mount mentioned in official patch notes or known issues: Snowwhite Deer.",
+      "aliases": [
+        "Snowwhite Deer"
+      ],
+      "tags": [
+        "mount"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_01_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=76",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "mount_white_bear",
+      "name": "White Bear",
+      "category": "mount",
+      "description": "Officially named mount mentioned in official patch notes or known issues: White Bear.",
+      "aliases": [
+        "White Bear"
+      ],
+      "tags": [
+        "mount"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_01_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=76",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "quest_mysterious_pot",
+      "name": "Mysterious Pot",
+      "category": "quest",
+      "description": "Officially named quest mentioned in patch notes.",
+      "aliases": [
+        "Mysterious Pot"
+      ],
+      "tags": [
+        "quest"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_00_03",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=73",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "quest_reunion",
+      "name": "Reunion",
+      "category": "quest",
+      "description": "Officially named quest mentioned in patch notes.",
+      "aliases": [
+        "Reunion"
+      ],
+      "tags": [
+        "quest"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_00_03",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=73",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "quest_turnali_s_request",
+      "name": "Turnali's Request",
+      "category": "quest",
+      "description": "Officially named quest mentioned in patch notes.",
+      "aliases": [
+        "Turnali's Request",
+        "Turnalis Request",
+        "Turnali’s Request"
+      ],
+      "tags": [
+        "quest"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_00_03",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=73",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "region_pailune",
+      "name": "Pailune",
+      "category": "region",
+      "description": "Officially named world/location found on the main Crimson Desert story page: Pailune.",
+      "aliases": [
+        "Pailune"
+      ],
+      "tags": [
+        "region"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "main_story",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/Main",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "region_pywel",
+      "name": "Pywel",
+      "category": "region",
+      "description": "Officially named world/location found on the main Crimson Desert story page: Pywel.",
+      "aliases": [
+        "Pywel"
+      ],
+      "tags": [
+        "region",
+        "world"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "main_story",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/Main",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "skill_aerial_force_palm",
+      "name": "Aerial Force Palm",
+      "category": "skill",
+      "description": "Officially named skill mentioned in patch notes.",
+      "aliases": [
+        "Aerial Force Palm"
+      ],
+      "tags": [
+        "skill"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_02_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-US/News/Notice/Detail?_boardNo=80",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "skill_healing_force_palm",
+      "name": "Healing Force Palm",
+      "category": "skill",
+      "description": "Officially named skill mentioned in patch notes.",
+      "aliases": [
+        "Healing Force Palm"
+      ],
+      "tags": [
+        "skill"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_02_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-US/News/Notice/Detail?_boardNo=80",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "skill_light_reflection",
+      "name": "Light Reflection",
+      "category": "skill",
+      "description": "Officially named skill mentioned in patch notes.",
+      "aliases": [
+        "Light Reflection"
+      ],
+      "tags": [
+        "skill"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_02_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-US/News/Notice/Detail?_boardNo=80",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "system_abyss_nexus",
+      "name": "Abyss Nexus",
+      "category": "system",
+      "description": "Officially named travel or system feature mentioned in patch notes.",
+      "aliases": [
+        "Abyss Nexus"
+      ],
+      "tags": [
+        "system",
+        "travel"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_00_03",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=73",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "system_abyss_skybridge_gates",
+      "name": "Abyss Skybridge Gates",
+      "category": "system",
+      "description": "Officially named system or location feature mentioned in patch notes.",
+      "aliases": [
+        "Abyss Skybridge Gates"
+      ],
+      "tags": [
+        "system"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "patch_1_02_00",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-US/News/Notice/Detail?_boardNo=80",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "weapon_derictus_spear",
+      "name": "Derictus Spear",
+      "category": "weapon",
+      "description": "Officially named edition or pre-order item: Derictus Spear.",
+      "aliases": [
+        "Derictus Spear"
+      ],
+      "tags": [
+        "edition",
+        "spear",
+        "weapon"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "game_editions",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=49",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "weapon_sielos_longsword",
+      "name": "Sielos Longsword",
+      "category": "weapon",
+      "description": "Officially named edition or pre-order item: Sielos Longsword.",
+      "aliases": [
+        "Sielos Longsword"
+      ],
+      "tags": [
+        "edition",
+        "sword",
+        "weapon"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "game_editions",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=49",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    },
+    {
+      "id": "weapon_tormented_soul_bow",
+      "name": "Tormented Soul Bow",
+      "category": "weapon",
+      "description": "Officially named edition or pre-order item: Tormented Soul Bow.",
+      "aliases": [
+        "Tormented Soul Bow"
+      ],
+      "tags": [
+        "bow",
+        "edition",
+        "weapon"
+      ],
+      "notes": "",
+      "source_type": "official",
+      "source_name": "game_editions",
+      "source_url": "https://crimsondesert.pearlabyss.com/en-us/News/Notice/Detail?_boardNo=49",
+      "confidence": "high",
+      "last_verified": "2026-04-04"
+    }
+  ]
+}

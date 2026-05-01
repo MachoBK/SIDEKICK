@@ -1,0 +1,725 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import SynkWaterBackground from "./components/SynkWaterBackground";
+
+export default function App() {
+  const [avatarState, setAvatarState] = useState("idle");
+  const [statusText, setStatusText] = useState("Ready.");
+  const [isConnected, setIsConnected] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [latestUserText, setLatestUserText] = useState("");
+  const [latestAssistantText, setLatestAssistantText] = useState(
+    "How can I help you today?"
+  );
+
+  const pcRef = useRef(null);
+  const dcRef = useRef(null);
+  const micStreamRef = useRef(null);
+  const remoteAudioRef = useRef(null);
+
+  async function startRealtime() {
+    if (isConnected || isConnecting) return;
+
+    try {
+      setIsConnecting(true);
+      setAvatarState("thinking");
+      setStatusText("Connecting realtime voice...");
+
+      const sessionRes = await fetch(
+        "https://clang-gander-kite.ngrok-free.dev/realtime/session",
+        {
+          method: "GET",
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      );
+
+      if (!sessionRes.ok) {
+        const errorText = await sessionRes.text();
+        throw new Error(errorText);
+      }
+
+      const sessionData = await sessionRes.json();
+
+      const ephemeralKey =
+        sessionData?.value ||
+        sessionData?.client_secret?.value ||
+        sessionData?.client_secret;
+
+      if (!ephemeralKey) {
+        throw new Error("No realtime client secret returned.");
+      }
+
+      const pc = new RTCPeerConnection();
+      pcRef.current = pc;
+
+      const remoteAudio = new Audio();
+      remoteAudio.autoplay = true;
+      remoteAudioRef.current = remoteAudio;
+
+      pc.ontrack = (event) => {
+        remoteAudio.srcObject = event.streams[0];
+        setAvatarState("talking");
+        setStatusText("SYNK is speaking...");
+      };
+
+      const micStream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+      });
+
+      micStreamRef.current = micStream;
+
+      micStream.getTracks().forEach((track) => {
+        pc.addTrack(track, micStream);
+      });
+
+      const dc = pc.createDataChannel("oai-events");
+      dcRef.current = dc;
+
+      dc.onopen = () => {
+        setIsConnected(true);
+        setIsConnecting(false);
+        setAvatarState("listening");
+        setStatusText("Realtime on. Speak naturally.");
+      };
+
+      dc.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+
+          if (
+            msg.type === "conversation.item.input_audio_transcription.completed"
+          ) {
+            if (msg.transcript) {
+              setLatestUserText(msg.transcript);
+            }
+          }
+
+          if (msg.type === "response.created") {
+            setLatestAssistantText("");
+            setAvatarState("thinking");
+            setStatusText("Thinking...");
+          }
+
+          if (msg.type === "response.audio_transcript.delta") {
+            if (msg.delta) {
+              setLatestAssistantText((prev) => prev + msg.delta);
+            }
+          }
+
+          if (msg.type === "response.audio.done") {
+            setAvatarState("listening");
+            setStatusText("Listening...");
+          }
+
+          if (msg.type === "response.done") {
+            setAvatarState("listening");
+            setStatusText("Realtime on. Speak naturally.");
+          }
+
+          if (msg.type === "error") {
+            console.error("Realtime API error:", msg);
+            setAvatarState("error");
+            setStatusText("Realtime error.");
+            setLatestAssistantText(
+              `Realtime error: ${msg.error?.message || "Unknown error"}`
+            );
+          }
+        } catch {
+          // Ignore non-JSON events
+        }
+      };
+
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+
+      const sdpRes = await fetch("https://api.openai.com/v1/realtime/calls", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${ephemeralKey}`,
+          "Content-Type": "application/sdp",
+        },
+        body: offer.sdp,
+      });
+
+      if (!sdpRes.ok) {
+        const errorText = await sdpRes.text();
+        throw new Error(errorText);
+      }
+
+      const answerSdp = await sdpRes.text();
+
+      await pc.setRemoteDescription({
+        type: "answer",
+        sdp: answerSdp,
+      });
+    } catch (error) {
+      console.error("Realtime failed:", error);
+      setIsConnecting(false);
+      setIsConnected(false);
+      setAvatarState("error");
+      setStatusText("Realtime failed.");
+      setLatestAssistantText(`Realtime error: ${error.message}`);
+      stopRealtime();
+    }
+  }
+
+  function stopRealtime() {
+    if (dcRef.current) {
+      try {
+        dcRef.current.close();
+      } catch {}
+      dcRef.current = null;
+    }
+
+    if (pcRef.current) {
+      try {
+        pcRef.current.close();
+      } catch {}
+      pcRef.current = null;
+    }
+
+    if (micStreamRef.current) {
+      micStreamRef.current.getTracks().forEach((track) => track.stop());
+      micStreamRef.current = null;
+    }
+
+    if (remoteAudioRef.current) {
+      try {
+        remoteAudioRef.current.pause();
+        remoteAudioRef.current.srcObject = null;
+      } catch {}
+      remoteAudioRef.current = null;
+    }
+
+    setIsConnected(false);
+    setIsConnecting(false);
+    setAvatarState("idle");
+    setStatusText("Ready.");
+  }
+
+  function toggleRealtime() {
+    if (isConnected || isConnecting) {
+      stopRealtime();
+    } else {
+      startRealtime();
+    }
+  }
+
+  useEffect(() => {
+    return () => stopRealtime();
+  }, []);
+
+  const badgeLabel = isConnecting
+    ? "Connecting"
+    : isConnected
+    ? "Realtime"
+    : avatarState === "talking"
+    ? "Speaking"
+    : "Online";
+
+  const orbClass = useMemo(() => {
+    if (isConnecting) return "thinking";
+    if (isConnected && avatarState === "talking") return "talking";
+    if (isConnected) return "listening";
+    return avatarState;
+  }, [avatarState, isConnected, isConnecting]);
+
+  return (
+    <div className="synk-shell">
+      <style>{`
+        * {
+          box-sizing: border-box;
+        }
+
+        html,
+        body,
+        #root {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background: #020512;
+          font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .synk-shell {
+          position: relative;
+          width: 100%;
+          height: 100vh;
+          overflow: hidden;
+          color: white;
+          background: #020512;
+        }
+
+        .synk-topbar {
+          position: absolute;
+          top: 26px;
+          left: 28px;
+          right: 28px;
+          z-index: 5;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .synk-logo {
+          padding: 18px 34px;
+          border-radius: 50px;
+          border: 1px solid rgba(155, 226, 255, 0.28);
+          background: rgba(2, 10, 24, 0.38);
+          backdrop-filter: blur(24px);
+          box-shadow:
+            0 0 40px rgba(0, 180, 255, 0.1),
+            inset 0 0 28px rgba(0, 204, 255, 0.04);
+        }
+
+        .synk-logo h1 {
+          margin: 0;
+          font-size: clamp(2.4rem, 4vw, 4.4rem);
+          letter-spacing: 0.22em;
+          font-weight: 300;
+          color: #c8f6ff;
+          text-shadow:
+            0 0 16px rgba(0, 225, 255, 0.65),
+            0 0 42px rgba(0, 120, 255, 0.34);
+        }
+
+        .synk-main {
+          position: relative;
+          z-index: 3;
+          width: 100%;
+          height: 100%;
+          display: grid;
+          place-items: center;
+          padding: 124px 24px 44px;
+        }
+
+        .synk-stage {
+          width: min(980px, 100%);
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 18px;
+        }
+
+        .synk-avatar-wrap {
+          position: relative;
+          width: min(650px, 100%);
+          height: min(42vh, 450px);
+          min-height: 260px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .synk-avatar-ring {
+          position: absolute;
+          width: min(430px, 70vw);
+          aspect-ratio: 1;
+          border-radius: 50%;
+          border: 1px solid rgba(0, 225, 255, 0.42);
+          box-shadow:
+            0 0 0 18px rgba(0, 225, 255, 0.025),
+            0 0 110px rgba(0, 225, 255, 0.18),
+            inset 0 0 60px rgba(0, 225, 255, 0.06);
+          pointer-events: none;
+          animation: ringBreathe 6s ease-in-out infinite;
+        }
+
+        .synk-avatar-ring::before,
+        .synk-avatar-ring::after {
+          content: "";
+          position: absolute;
+          border-radius: inherit;
+          inset: 16px;
+          border: 1px solid rgba(91, 171, 255, 0.18);
+        }
+
+        .synk-avatar-ring::after {
+          inset: -22px;
+          border-color: rgba(153, 105, 255, 0.16);
+        }
+
+        .synk-avatar-core {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          display: grid;
+          place-items: center;
+        }
+
+        .synk-orb {
+          position: relative;
+          width: min(250px, 52vw);
+          aspect-ratio: 1;
+          border-radius: 50%;
+          display: grid;
+          place-items: center;
+          background:
+            radial-gradient(circle at 50% 42%, rgba(190, 250, 255, 0.58), rgba(0, 225, 255, 0.18) 30%, rgba(0, 28, 55, 0.16) 58%, transparent 72%),
+            radial-gradient(circle at center, rgba(0, 225, 255, 0.22), transparent 64%);
+          box-shadow:
+            0 0 42px rgba(0, 225, 255, 0.45),
+            0 0 120px rgba(0, 125, 255, 0.22),
+            inset 0 0 48px rgba(0, 225, 255, 0.18);
+          animation: orbIdle 4s ease-in-out infinite;
+        }
+
+        .synk-orb::before {
+          content: "";
+          position: absolute;
+          inset: -28px;
+          border-radius: inherit;
+          background:
+            repeating-radial-gradient(
+              circle,
+              rgba(0, 225, 255, 0.32) 0px,
+              rgba(0, 225, 255, 0.13) 2px,
+              transparent 7px,
+              transparent 26px
+            );
+          opacity: 0.55;
+          animation: orbRipple 4s ease-in-out infinite;
+        }
+
+        .synk-orb::after {
+          content: "";
+          position: absolute;
+          inset: 28px;
+          border-radius: inherit;
+          border: 1px solid rgba(210, 250, 255, 0.36);
+          box-shadow:
+            inset 0 0 26px rgba(255, 255, 255, 0.1),
+            0 0 28px rgba(0, 225, 255, 0.22);
+        }
+
+        .synk-orb-word {
+          position: relative;
+          z-index: 2;
+          padding-left: 0.22em;
+          font-size: clamp(2rem, 5vw, 4.8rem);
+          letter-spacing: 0.22em;
+          font-weight: 300;
+          color: #e6fbff;
+          text-shadow:
+            0 0 18px rgba(0, 225, 255, 0.9),
+            0 0 60px rgba(0, 120, 255, 0.45);
+        }
+
+        .synk-orb.listening {
+          animation: orbListening 1.7s ease-in-out infinite;
+        }
+
+        .synk-orb.talking {
+          animation: orbTalking 0.7s ease-in-out infinite;
+        }
+
+        .synk-orb.thinking {
+          animation: orbThinking 1.1s ease-in-out infinite;
+        }
+
+        .synk-wave {
+          position: absolute;
+          bottom: 18%;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          align-items: end;
+          justify-content: center;
+          gap: 7px;
+          height: 54px;
+          z-index: 2;
+        }
+
+        .synk-wave span {
+          width: 5px;
+          height: 14px;
+          border-radius: 999px;
+          background: rgba(180, 250, 255, 0.86);
+          box-shadow: 0 0 14px rgba(0, 225, 255, 0.72);
+          animation: waveIdle 1.6s ease-in-out infinite;
+          opacity: 0.72;
+        }
+
+        .synk-wave span:nth-child(2) { animation-delay: 0.1s; }
+        .synk-wave span:nth-child(3) { animation-delay: 0.2s; }
+        .synk-wave span:nth-child(4) { animation-delay: 0.3s; }
+        .synk-wave span:nth-child(5) { animation-delay: 0.4s; }
+        .synk-wave span:nth-child(6) { animation-delay: 0.5s; }
+        .synk-wave span:nth-child(7) { animation-delay: 0.6s; }
+
+        .synk-orb.talking .synk-wave span,
+        .synk-orb.listening .synk-wave span {
+          animation-name: waveActive;
+          animation-duration: 0.55s;
+        }
+
+        .synk-chat-panel {
+          width: min(760px, 90vw);
+          max-height: 185px;
+          overflow-y: auto;
+          padding: 18px 24px;
+          color: #d1f5ff;
+          font-size: clamp(1rem, 1.2vw, 1.25rem);
+          line-height: 1.65;
+          text-align: left;
+          background: rgba(2, 10, 24, 0.35);
+          border: 1px solid rgba(125, 211, 252, 0.18);
+          border-radius: 24px;
+          backdrop-filter: blur(16px);
+        }
+
+        .synk-chat-row {
+          margin-bottom: 10px;
+        }
+
+        .synk-chat-row:last-child {
+          margin-bottom: 0;
+        }
+
+        .synk-chat-label {
+          display: inline-block;
+          min-width: 58px;
+          color: #8ef4ff;
+          font-weight: 700;
+        }
+
+        .synk-chat-text {
+          color: #e8fbff;
+        }
+
+        .synk-mic-wrap {
+          margin-top: 8px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .synk-mic-button {
+          position: relative;
+          width: 132px;
+          height: 132px;
+          border-radius: 999px;
+          border: 2px solid rgba(138, 239, 255, 0.8);
+          background:
+            radial-gradient(circle at 50% 42%, rgba(184, 246, 255, 0.28), rgba(0, 180, 255, 0.16) 38%, rgba(2, 8, 22, 0.9) 72%),
+            rgba(2, 8, 22, 0.92);
+          color: #e9fbff;
+          cursor: pointer;
+          box-shadow:
+            0 0 32px rgba(0, 225, 255, 0.55),
+            0 0 90px rgba(0, 125, 255, 0.24),
+            inset 0 0 30px rgba(0, 225, 255, 0.15);
+          transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+        }
+
+        .synk-mic-button::before {
+          content: "";
+          position: absolute;
+          inset: -34px;
+          border-radius: inherit;
+          background:
+            repeating-radial-gradient(
+              circle,
+              rgba(0, 225, 255, 0.3) 0px,
+              rgba(0, 225, 255, 0.16) 2px,
+              transparent 6px,
+              transparent 22px
+            );
+          opacity: 0.55;
+          animation: micRipple 3.8s ease-in-out infinite;
+          z-index: -1;
+        }
+
+        .synk-mic-button:hover {
+          transform: scale(1.04);
+        }
+
+        .synk-mic-button.active {
+          border-color: rgba(255, 145, 220, 0.75);
+          box-shadow:
+            0 0 44px rgba(255, 95, 205, 0.45),
+            0 0 120px rgba(0, 225, 255, 0.38),
+            inset 0 0 38px rgba(255, 95, 205, 0.16);
+        }
+
+        .synk-mic-icon {
+          width: 48px;
+          height: 48px;
+        }
+
+        .synk-status {
+          min-height: 22px;
+          color: #b7e8ff;
+          font-size: 0.98rem;
+          text-align: center;
+        }
+
+        .synk-badge {
+          position: absolute;
+          right: 28px;
+          bottom: 24px;
+          z-index: 5;
+          padding: 10px 16px;
+          border-radius: 999px;
+          background: rgba(3, 15, 30, 0.42);
+          border: 1px solid rgba(125, 211, 252, 0.2);
+          color: #d3f2ff;
+          font-size: 0.85rem;
+          letter-spacing: 0.08em;
+          backdrop-filter: blur(18px);
+        }
+
+        @keyframes ringBreathe {
+          0%, 100% { transform: scale(1); opacity: 0.8; }
+          50% { transform: scale(1.035); opacity: 1; }
+        }
+
+        @keyframes orbIdle {
+          0%, 100% { transform: scale(1); filter: brightness(1); }
+          50% { transform: scale(1.025); filter: brightness(1.12); }
+        }
+
+        @keyframes orbListening {
+          0%, 100% { transform: scale(1); filter: brightness(1.05); }
+          50% { transform: scale(1.06); filter: brightness(1.35); }
+        }
+
+        @keyframes orbTalking {
+          0%, 100% { transform: scale(1.02); filter: brightness(1.25); }
+          50% { transform: scale(1.12); filter: brightness(1.65); }
+        }
+
+        @keyframes orbThinking {
+          0%, 100% { transform: rotate(0deg) scale(1.02); filter: hue-rotate(0deg); }
+          50% { transform: rotate(1deg) scale(1.06); filter: hue-rotate(25deg); }
+        }
+
+        @keyframes orbRipple {
+          0%, 100% { transform: scale(0.92); opacity: 0.28; }
+          50% { transform: scale(1.15); opacity: 0.72; }
+        }
+
+        @keyframes waveIdle {
+          0%, 100% { height: 12px; opacity: 0.45; }
+          50% { height: 24px; opacity: 0.85; }
+        }
+
+        @keyframes waveActive {
+          0%, 100% { height: 12px; opacity: 0.5; }
+          50% { height: 52px; opacity: 1; }
+        }
+
+        @keyframes micRipple {
+          0%, 100% { transform: scale(0.92); opacity: 0.28; }
+          50% { transform: scale(1.12); opacity: 0.7; }
+        }
+
+        @media (max-width: 900px) {
+          .synk-topbar {
+            left: 16px;
+            right: 16px;
+          }
+
+          .synk-main {
+            padding-top: 150px;
+          }
+
+          .synk-avatar-wrap {
+            min-height: 240px;
+            height: 35vh;
+          }
+
+          .synk-mic-button {
+            width: 108px;
+            height: 108px;
+          }
+        }
+      `}</style>
+
+      <SynkWaterBackground />
+
+      <header className="synk-topbar">
+        <div className="synk-logo">
+          <h1>SYNK</h1>
+        </div>
+      </header>
+
+      <main className="synk-main">
+        <div className="synk-stage">
+          <div className="synk-avatar-wrap">
+            <div className="synk-avatar-ring" />
+
+            <div className="synk-avatar-core">
+              <div className={`synk-orb ${orbClass}`}>
+                <div className="synk-orb-word">SYNK</div>
+                <div className="synk-wave">
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="synk-chat-panel">
+            {latestUserText && (
+              <div className="synk-chat-row">
+                <span className="synk-chat-label">You:</span>
+                <span className="synk-chat-text">{latestUserText}</span>
+              </div>
+            )}
+
+            <div className="synk-chat-row">
+              <span className="synk-chat-label">SYNK:</span>
+              <span className="synk-chat-text">{latestAssistantText}</span>
+            </div>
+          </div>
+
+          <div className="synk-mic-wrap">
+            <button
+              className={`synk-mic-button ${isConnected ? "active" : ""}`}
+              onClick={toggleRealtime}
+              aria-label={
+                isConnected ? "Stop realtime voice" : "Start realtime voice"
+              }
+              title={isConnected ? "Stop realtime voice" : "Start realtime voice"}
+            >
+              <svg
+                className="synk-mic-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 15a3 3 0 0 0 3-3V7a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Z" />
+                <path d="M19 11a7 7 0 0 1-14 0" />
+                <path d="M12 18v3" />
+                <path d="M8 21h8" />
+              </svg>
+            </button>
+
+            <div className="synk-status">{statusText}</div>
+          </div>
+        </div>
+      </main>
+
+      <div className="synk-badge">{badgeLabel}</div>
+    </div>
+  );
+}

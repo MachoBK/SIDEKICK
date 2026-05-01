@@ -1,0 +1,340 @@
+{
+  "game_info": {
+    "name": "Crimson Desert",
+    "genre": "Open World Action Adventure",
+    "developer": "Pearl Abyss",
+    "world": "Pywel",
+    "protagonist": "Kliff",
+    "primary_faction": "Greymanes",
+    "enemy_faction": "Black Bears",
+    "description": "An open-world action-adventure set on the continent of Pywel, following Kliff and the Greymanes after a devastating ambush."
+  },
+
+  "official_story_and_world": {
+    "summary": [
+      "The story follows Kliff after the Greymanes are devastated and scattered.",
+      "Kliff is trying to reunite the survivors, rebuild the Greymanes, and reclaim what was lost.",
+      "The Black Bears are a major hostile force in the opening setup."
+    ],
+    "known_terms": [
+      "Pywel",
+      "Kliff",
+      "Greymanes",
+      "Black Bears"
+    ]
+  },
+
+  "official_characters": [
+    {
+      "name": "Kliff",
+      "role": "Protagonist",
+      "source": "official",
+      "notes": "Greymane leader figure and the player-facing central character."
+    },
+    {
+      "name": "Myurdin",
+      "role": "Known named character",
+      "source": "official",
+      "notes": "Mentioned in official story and promotional material."
+    },
+    {
+      "name": "Oongka",
+      "role": "Known named character",
+      "source": "official",
+      "notes": "Associated with the Greymanes in official story material."
+    },
+    {
+      "name": "Yann",
+      "role": "Known named character",
+      "source": "official",
+      "notes": "Associated with the Greymanes in official story material."
+    },
+    {
+      "name": "Naira",
+      "role": "Known named character",
+      "source": "official",
+      "notes": "Associated with the Greymanes in official story material."
+    }
+  ],
+
+  "official_bosses": [
+    {
+      "name": "White Horn",
+      "source": "official",
+      "status": "publicly shown / officially named",
+      "region": "",
+      "chapter": "",
+      "boss_type": "major boss",
+      "tips": [
+        "Treat it like a reaction and spacing fight.",
+        "Watch the opening pattern before committing to offense.",
+        "Punish after larger recovery windows instead of attacking constantly."
+      ]
+    },
+    {
+      "name": "Reed Devil",
+      "source": "official",
+      "status": "publicly shown / officially named",
+      "region": "",
+      "chapter": "",
+      "boss_type": "major boss",
+      "tips": [
+        "Stay patient and avoid panic dodging.",
+        "Create distance before healing.",
+        "Use short punish windows instead of long greedy combos."
+      ]
+    },
+    {
+      "name": "Staglord",
+      "source": "official",
+      "status": "publicly shown / officially named",
+      "region": "",
+      "chapter": "",
+      "boss_type": "major boss",
+      "tips": [
+        "Control stamina so you can still dodge after attacking.",
+        "Bait larger moves and answer during recovery.",
+        "Prioritize positioning over raw aggression."
+      ]
+    },
+    {
+      "name": "Queen Stoneback Crab",
+      "source": "official",
+      "status": "publicly shown / officially named",
+      "region": "",
+      "chapter": "",
+      "boss_type": "large-scale boss",
+      "tips": [
+        "Look for safe windows instead of forcing damage.",
+        "Stay aware of area control and movement space.",
+        "Treat it like an endurance and positioning encounter."
+      ]
+    },
+    {
+      "name": "Hexe Marie",
+      "source": "official",
+      "status": "publicly shown / officially named",
+      "region": "",
+      "chapter": "",
+      "boss_type": "major boss",
+      "tips": [
+        "Stay composed and learn the rhythm before pushing damage.",
+        "Respect summon pressure and avoid overcommitting.",
+        "Use calm spacing and recovery punish opportunities."
+      ]
+    }
+  ],
+
+  "official_systems": {
+    "combat": [
+      "Timing-based action combat",
+      "Dodging and spacing are important",
+      "Short punish windows are often safer than long attack strings",
+      "Stamina management is important"
+    ],
+    "travel_and_world": [
+      "Abyss Nexuses are a known system term in official notices"
+    ],
+    "abilities_and_progression_terms": [
+      "Force Palm",
+      "Tenebrum"
+    ],
+    "known_locations_or_hubs": [
+      "Howling Hill Camp"
+    ]
+  },
+
+  "official_patch_notice_terms": [
+    {
+      "term": "Abyss Nexuses",
+      "source": "official notice"
+    },
+    {
+      "term": "Force Palm",
+      "source": "official notice"
+    },
+    {
+      "term": "Howling Hill Camp",
+      "source": "official notice"
+    },
+    {
+      "term": "Reed Devil",
+      "source": "official notice"
+    },
+    {
+      "term": "Tenebrum",
+      "source": "official notice"
+    }
+  ],
+
+  "community_reference": {
+    "note": "These entries are useful for breadth, but they are not all verified from Pearl Abyss official materials. SYNK should label them as community-sourced when answering.",
+    "reported_total_bosses": [
+      {
+        "count": 75,
+        "source": "community"
+      },
+      {
+        "count": 76,
+        "source": "community"
+      }
+    ],
+    "community_boss_names": [
+      "Hexe Marie",
+      "Queen Stoneback Crab",
+      "Staglord",
+      "Reed Devil",
+      "White Horn",
+      "Golden Star",
+      "Myurdin",
+      "Matthias",
+      "Kailok, The Hornsplitter",
+      "Silver Armor",
+      "Crowcaller",
+      "Kearush the Slayer",
+      "Titan",
+      "Desert Ancient",
+      "Cassius Morten",
+      "Muskan",
+      "Fortain, the Cursed Knight",
+      "Gwen Kraber",
+      "Snow Walker",
+      "Marni's Excavation",
+      "Beloth the Darksworn"
+    ]
+  },
+
+  "regions": [
+    {
+      "name": "Pywel",
+      "source": "official",
+      "type": "world",
+      "notes": "Main continent / world setting."
+    },
+    {
+      "name": "Howling Hill Camp",
+      "source": "official",
+      "type": "location",
+      "notes": "Named in official notices."
+    },
+    {
+      "name": "Hernand",
+      "source": "community",
+      "type": "region",
+      "notes": "Appears frequently in community guides."
+    },
+    {
+      "name": "Everfrost",
+      "source": "community",
+      "type": "region",
+      "notes": "Appears in community gear and boss guides."
+    },
+    {
+      "name": "Delesyia",
+      "source": "community",
+      "type": "region",
+      "notes": "Appears in community boss references."
+    },
+    {
+      "name": "Pailune",
+      "source": "community",
+      "type": "region",
+      "notes": "Appears in community boss references."
+    }
+  ],
+
+  "quests": [
+    {
+      "name": "Legendary Wolf",
+      "source": "community",
+      "type": "faction quest",
+      "region": "Hernand",
+      "notes": "Community guides say it rewards the Silver Fang mount."
+    },
+    {
+      "name": "Silence From Afar",
+      "source": "community",
+      "type": "quest",
+      "region": "Hernand",
+      "notes": "Community guides list this as part of the Legendary Wolf chain."
+    }
+  ],
+
+  "gear": [
+    {
+      "name": "Shadow Armor",
+      "source": "community",
+      "type": "armor set",
+      "region": "Everfrost",
+      "notes": "Community guides place pieces around Hoenmark Ruins and nearby areas."
+    },
+    {
+      "name": "Beehive Club",
+      "source": "community",
+      "type": "weapon",
+      "region": "Hernand",
+      "notes": "Community guides describe it as an early quirky drop weapon."
+    },
+    {
+      "name": "Silver Fang",
+      "source": "community",
+      "type": "mount",
+      "region": "Hernand",
+      "notes": "Community guides say it is tied to the Legendary Wolf quest."
+    }
+  ],
+
+  "enemy_archetypes": [
+    {
+      "name": "humanoid duelists",
+      "description": "Usually reward patience, spacing, and punish timing."
+    },
+    {
+      "name": "large monsters",
+      "description": "Usually punish greed and force positioning discipline."
+    },
+    {
+      "name": "summoner / caster bosses",
+      "description": "Usually require crowd-control awareness and disciplined target priority."
+    },
+    {
+      "name": "mobility bosses",
+      "description": "Usually test stamina control and reaction timing."
+    }
+  ],
+
+  "progression_stages": [
+    {
+      "stage": "early_game",
+      "advice": [
+        "Prioritize survivability and consistency over risky burst damage.",
+        "Learn enemy patterns before chasing damage.",
+        "Use exploration to gather resources before hard encounters."
+      ]
+    },
+    {
+      "stage": "mid_game",
+      "advice": [
+        "Start specializing your gear after you understand your combat rhythm.",
+        "Build around mobility, pressure, or durability instead of spreading too thin."
+      ]
+    },
+    {
+      "stage": "late_game",
+      "advice": [
+        "Refine your build around your preferred weapon and boss approach.",
+        "Use targeted preparation for specific encounters instead of generic setup."
+      ]
+    }
+  ],
+
+  "assistant_rules": {
+    "response_policy": [
+      "Use official_bosses and official_story_and_world as highest-confidence sources.",
+      "If answering with community_reference data, explicitly say it is community-sourced.",
+      "If a boss, quest, item, or system is not in the database, say that clearly instead of pretending certainty.",
+      "Use tactical action-game advice when exact facts are missing.",
+      "Prefer concise, practical answers unless the user asks for more detail."
+    ]
+  }
+}

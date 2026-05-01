@@ -1,0 +1,119 @@
+Perfect — that makes Sidekick even better.
+
+A video-game AI agent is more focused, more fun, and easier to turn into a real project.
+
+Sidekick for video games
+
+Instead of a general life assistant, make it a gaming sidekick that helps players while they play.
+
+What it could do
+explain game mechanics
+give build suggestions
+recommend weapons/items
+help with quests
+track objectives
+answer lore questions
+give beginner tips
+suggest strategies for bosses or matches
+
+So the idea becomes:
+
+Sidekick = an AI gaming companion that helps players make better decisions and learn faster.
+
+Best beginner version
+
+Start with a version that works for one game only.
+
+That is important.
+
+Do not try to support every game at once.
+
+Pick one:
+
+Minecraft
+Fortnite
+Call of Duty
+Elden Ring
+League of Legends
+Valorant
+Roblox game helper
+Skyrim
+GTA roleplay helper
+Example
+
+If you choose Fortnite, Sidekick could:
+
+suggest loadouts
+explain movement tips
+recommend early/mid/end-game strategy
+answer map and item questions
+
+If you choose Elden Ring, Sidekick could:
+
+suggest builds
+explain stat scaling
+recommend boss prep
+give progression tips
+Strong project versions
+Version 1: Chat game helper
+
+User types:
+
+“What’s the best beginner build?”
+“How do I beat this boss?”
+“What weapon should I use?”
+“What should I upgrade first?”
+
+Sidekick replies with useful game-specific help.
+
+Tech stack
+Python
+Streamlit
+OpenAI API
+simple JSON file for saved chats or builds
+
+This is the easiest version.
+
+Version 2: Smart assistant
+
+Add:
+
+game selection
+saved builds
+inventory/loadout recommendations
+quest tracker
+strategy mode
+beginner mode vs advanced mode
+Version 3: Advanced gaming sidekick
+
+Later you can add:
+
+voice input
+voice response
+screenshot analysis
+stat/build calculator
+game wiki search
+companion overlay
+
+That becomes a very serious portfolio project.
+
+Best project idea for you
+
+I recommend this:
+
+Sidekick: AI Build and Strategy Assistant
+
+A gaming assistant that helps players with:
+
+builds
+loadouts
+progression
+strategy
+game knowledge
+Core features
+Chat assistant
+Choose a game
+Beginner or advanced mode
+Saved builds/loadouts
+Strategy tips
+Clean UI

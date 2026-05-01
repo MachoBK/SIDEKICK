@@ -1,0 +1,17 @@
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+.env
+venv/
+.venv/
+__pycache__/
+dist/
+frontend/dist/
+key.py
+*.pyc
+*.bphys
+*.blend
+*.blend1
+*.exr
+frontend/public/models/blendcache_*/
+frontend/public/models/cache_ocean/

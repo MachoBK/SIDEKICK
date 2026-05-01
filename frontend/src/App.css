@@ -1,0 +1,341 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #020817;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+button,
+select {
+  font-family: inherit;
+}
+
+.synk-shell {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  color: white;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.16), transparent 24%),
+    radial-gradient(circle at 80% 30%, rgba(59, 130, 246, 0.14), transparent 28%),
+    linear-gradient(180deg, #010611 0%, #031326 55%, #020817 100%);
+}
+
+.synk-shell::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(ellipse at 25% 50%, rgba(125, 211, 252, 0.14), transparent 32%),
+    radial-gradient(ellipse at 75% 60%, rgba(37, 99, 235, 0.13), transparent 32%);
+  filter: blur(36px);
+  animation: synkPulse 12s ease-in-out infinite;
+}
+
+.synk-water {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.synk-water-line {
+  position: absolute;
+  left: -12%;
+  width: 124%;
+  height: 34%;
+  border-radius: 50%;
+  border-top: 1px solid rgba(125, 211, 252, 0.18);
+  filter: blur(1px);
+}
+
+.synk-water-line.one {
+  bottom: 8%;
+  animation: waveDriftA 12s ease-in-out infinite;
+}
+
+.synk-water-line.two {
+  bottom: 16%;
+  opacity: 0.5;
+  animation: waveDriftB 14s ease-in-out infinite;
+}
+
+.synk-water-line.three {
+  bottom: 25%;
+  opacity: 0.3;
+  animation: waveDriftA 16s ease-in-out infinite reverse;
+}
+
+.synk-topbar {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  right: 24px;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.synk-logo,
+.synk-voice-card {
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  background: rgba(3, 15, 30, 0.44);
+  backdrop-filter: blur(22px);
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.28);
+}
+
+.synk-logo {
+  padding: 20px 28px;
+  border-radius: 32px;
+}
+
+.synk-logo h1 {
+  margin: 0;
+  font-size: clamp(2rem, 3.3vw, 3.35rem);
+  letter-spacing: 0.22em;
+  font-weight: 400;
+  color: #b8ecff;
+}
+
+.synk-voice-card {
+  width: min(450px, 42vw);
+  min-width: 290px;
+  padding: 18px 20px;
+  border-radius: 34px;
+}
+
+.synk-voice-label {
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  color: #d5f3ff;
+  letter-spacing: 0.08em;
+}
+
+.synk-voice-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.synk-voice-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  color: #9be9ff;
+  background: rgba(8, 30, 52, 0.7);
+  border: 1px solid rgba(125, 211, 252, 0.18);
+}
+
+.synk-voice-select {
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 24px;
+  border: 1px solid rgba(125, 211, 252, 0.2);
+  background: rgba(5, 21, 40, 0.78);
+  color: white;
+  outline: none;
+  font-size: 1rem;
+}
+
+.synk-main {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 125px 24px 50px;
+}
+
+.synk-stage {
+  width: min(980px, 100%);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+}
+
+.synk-avatar-wrap {
+  position: relative;
+  width: min(760px, 100%);
+  height: min(62vh, 680px);
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.synk-avatar-ring {
+  position: absolute;
+  width: min(540px, 78vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgba(59, 130, 246, 0.34);
+  box-shadow:
+    0 0 0 18px rgba(14, 165, 233, 0.03),
+    0 0 130px rgba(14, 165, 233, 0.14),
+    inset 0 0 70px rgba(125, 211, 252, 0.04);
+}
+
+.synk-avatar-core {
+  position: relative;
+  width: min(620px, 90vw);
+  height: min(620px, 90vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  animation: floatCore 6s ease-in-out infinite;
+}
+
+.synk-avatar-core::before {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.22), transparent 68%);
+  filter: blur(42px);
+  z-index: -1;
+}
+
+.synk-assistant-line {
+  max-width: 900px;
+  padding: 0 16px;
+  font-size: clamp(1.3rem, 2.6vw, 2.45rem);
+  line-height: 1.2;
+  text-align: center;
+  color: #cbefff;
+}
+
+.synk-mic-wrap {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.synk-mic-button {
+  width: 124px;
+  height: 124px;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(125, 211, 252, 0.38), rgba(14, 165, 233, 0.18) 32%, rgba(3, 10, 20, 0.88) 74%);
+  color: white;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 10px rgba(56, 189, 248, 0.04),
+    0 0 54px rgba(14, 165, 233, 0.3);
+}
+
+.synk-mic-button.active {
+  border-color: rgba(251, 113, 133, 0.55);
+  box-shadow:
+    0 0 0 12px rgba(251, 113, 133, 0.05),
+    0 0 80px rgba(251, 113, 133, 0.3);
+}
+
+.synk-status {
+  color: #b7e8ff;
+  font-size: 0.98rem;
+}
+
+.synk-badge {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(3, 15, 30, 0.52);
+  border: 1px solid rgba(125, 211, 252, 0.16);
+  color: #d3f2ff;
+  font-size: 0.92rem;
+  letter-spacing: 0.06em;
+  backdrop-filter: blur(18px);
+}
+
+@keyframes synkPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+
+  50% {
+    transform: scale(1.06) translateY(-10px);
+    opacity: 1;
+  }
+}
+
+@keyframes waveDriftA {
+  0%, 100% {
+    transform: translateX(0) scaleY(1);
+  }
+
+  50% {
+    transform: translateX(3%) scaleY(1.06);
+  }
+}
+
+@keyframes waveDriftB {
+  0%, 100% {
+    transform: translateX(0) scaleY(1);
+  }
+
+  50% {
+    transform: translateX(-3%) scaleY(0.95);
+  }
+}
+
+@keyframes floatCore {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@media (max-width: 900px) {
+  .synk-topbar {
+    flex-direction: column;
+  }
+
+  .synk-logo,
+  .synk-voice-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .synk-main {
+    padding-top: 185px;
+  }
+
+  .synk-avatar-wrap {
+    min-height: 300px;
+    height: 46vh;
+  }
+
+  .synk-mic-button {
+    width: 108px;
+    height: 108px;
+  }
+}

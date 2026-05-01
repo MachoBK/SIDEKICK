@@ -1,0 +1,109 @@
+{
+  "4f9d8d29-5cce-4c2b-bb62-3a163d00ed93": {
+    "meta": {
+      "personality": "calm_strategist",
+      "preferred_style": "normal",
+      "created_at": "2026-04-04T13:49:59.868268",
+      "updated_at": "2026-04-04T16:47:45.658120"
+    },
+    "context": {
+      "last_response_id": "resp_0d226454350bbd6b0069d10ca746d08194b730bc5319236301",
+      "last_intent": "general",
+      "last_topic": "general"
+    },
+    "profile": {
+      "name": null,
+      "playstyle": null,
+      "experience_level": null,
+      "favorite_focus": null
+    },
+    "history": [
+      {
+        "user": "hi",
+        "assistant": "I hit an AI error, but I did find related official material: White Bear, Snowwhite Deer, Khaled Shield, Howling Hill Camp, Bekker Shield. Error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-*********************************************************************************************************************************************************1UAS. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}",
+        "timestamp": "2026-04-04T13:51:35.704607"
+      }
+    ]
+  },
+  "878a22a6-b98c-4553-b3bd-89dcf1dba2f0": {
+    "meta": {
+      "personality": "cartoon",
+      "preferred_style": "normal",
+      "created_at": "2026-04-04T15:11:26.550029",
+      "updated_at": "2026-04-04T17:04:03.819755"
+    },
+    "context": {
+      "last_response_id": "resp_0a3d555dfd8e1f110069d1438aecac81a1935e6c83fb53e56d",
+      "last_intent": "profile",
+      "last_topic": "player profile"
+    },
+    "profile": {
+      "name": "Edgar",
+      "playstyle": null,
+      "experience_level": null,
+      "favorite_focus": null
+    },
+    "history": [
+      {
+        "user": "hi",
+        "assistant": "Hey again, Alayna! Let\u2019s kick things off! What\u2019s on your mind? Any questions about gear, builds, or bosses?",
+        "timestamp": "2026-04-04T15:11:43.152933"
+      },
+      {
+        "user": "hi",
+        "assistant": "Hey, Alayna! It seems like we're stuck in a loop. Let me know how I can help! What\u2019s on your mind?",
+        "timestamp": "2026-04-04T15:11:54.071353"
+      },
+      {
+        "user": "im checking your voices",
+        "assistant": "Gotcha! Testing the waters, huh? I\u2019m here to help with anything about Crimson Desert. Just let me know!",
+        "timestamp": "2026-04-04T15:12:13.235408"
+      },
+      {
+        "user": "hi",
+        "assistant": "Hey there, Alayna! It\u2019s a bit of a \u201chi\u201d party! What can I help you with today?",
+        "timestamp": "2026-04-04T15:12:33.239102"
+      },
+      {
+        "user": "hi",
+        "assistant": "Hey, Alayna! We\u2019re back at it! What can I assist you with in Crimson Desert? Let\u2019s get to it!",
+        "timestamp": "2026-04-04T15:12:45.926734"
+      },
+      {
+        "user": "hi",
+        "assistant": "Hey again, Alayna! Let\u2019s break that repetition! What can I help you with in Crimson Desert? Ready to tackle some epic quests or gear?",
+        "timestamp": "2026-04-04T15:12:59.419419"
+      },
+      {
+        "user": "my name is roy",
+        "assistant": "Got it, Roy. I\u2019ll remember your name. Alright, let\u2019s go.",
+        "timestamp": "2026-04-04T16:47:58.754004"
+      },
+      {
+        "user": "can you tell me about the first boss in crimson desert",
+        "assistant": "The first boss you\u2019ll encounter in Crimson Desert is **White Horn**. Here\u2019s the lowdown:\n\n- **Type**: Aggressive combat.\n- **Strategy**: Focus on dodging its attacks and finding openings for quick strikes. Timing is key!\n- **Weaknesses**: Short punish windows\u2014capitalize on those after it attacks.\n\nMake sure to manage your stamina to keep avoiding those heavy hits. How does that sound, Roy? Ready to take on White Horn?",
+        "timestamp": "2026-04-04T16:51:20.029729"
+      },
+      {
+        "user": "my name is jason",
+        "assistant": "Got it, Jason. I\u2019ll remember your name. Alright, let\u2019s go.",
+        "timestamp": "2026-04-04T16:59:00.462870"
+      },
+      {
+        "user": "tell me about the first boss in crimson desert",
+        "assistant": "SYNK says: Black Bears is an officially named faction in Crimson Desert. Officially named faction found on the main Crimson Desert story page: Black Bears. Tags: enemy, faction. Also known as: Black Bears.",
+        "timestamp": "2026-04-04T16:59:29.388257"
+      },
+      {
+        "user": "can you tell me about the first boss",
+        "assistant": "The first boss in Crimson Desert is **White Horn**. Here are the details:\n\n- **Type**: Aggressive combat.\n- **Strategy**: Focus on dodging its attacks and look for quick openings to strike. Timing is essential!\n- **Weaknesses**: Use short punish windows effectively after its attacks.\n\nStay mindful of your stamina to keep avoiding those big hits. Ready to show White Horn who\u2019s boss, Jason?",
+        "timestamp": "2026-04-04T16:59:56.853949"
+      },
+      {
+        "user": "my name is edgar",
+        "assistant": "Got it, Edgar. I\u2019ll remember your name. Alright, let\u2019s go.",
+        "timestamp": "2026-04-04T17:04:03.821047"
+      }
+    ]
+  }
+}
