@@ -16,11 +16,7 @@ def normalize_text(text):
 
 
 def content_to_search_text(content):
-    if isinstance(content, dict):
-        return json.dumps(content, ensure_ascii=False).lower()
-    if isinstance(content, list):
-        return json.dumps(content, ensure_ascii=False).lower()
-    return str(content).lower()
+    return json.dumps(content, ensure_ascii=False).lower()
 
 
 def create_tables():
@@ -44,7 +40,7 @@ def create_tables():
 
 
 def insert_knowledge_item(cursor, item, fallback_index=0):
-    item_id = item.get("id") or f"{item.get('game', 'unknown')}_{fallback_index}"
+    item_id = item.get("id") or f"knowledge_{fallback_index}"
     game = item.get("game", "Unknown")
     section = item.get("section", "General")
     title = item.get("title", "Untitled")
@@ -80,19 +76,15 @@ def load_json_to_db():
     with open(JSON_PATH, "r", encoding="utf-8") as file:
         data = json.load(file)
 
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    # Supports:
-    # 1. A single object
-    # 2. A list of objects
-    # 3. A file shaped like {"items": [...]}
     if isinstance(data, list):
         items = data
     elif isinstance(data, dict) and isinstance(data.get("items"), list):
         items = data["items"]
     else:
         items = [data]
+
+    conn = get_connection()
+    cursor = conn.cursor()
 
     for index, item in enumerate(items):
         insert_knowledge_item(cursor, item, index)
@@ -110,11 +102,14 @@ def score_result(query_words, row):
     title_text = normalize_text(title)
     section_text = normalize_text(section)
     game_text = normalize_text(game)
+    type_text = normalize_text(item_type)
 
     for word in query_words:
         if word in title_text:
-            score += 6
+            score += 8
         if word in section_text:
+            score += 5
+        if word in type_text:
             score += 4
         if word in game_text:
             score += 3
@@ -151,7 +146,6 @@ def search_knowledge(query, limit=5):
 
     for row in rows:
         score = score_result(query_words, row)
-
         if score > 0:
             scored_rows.append((score, row))
 
