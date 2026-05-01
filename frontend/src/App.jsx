@@ -59,15 +59,18 @@ export default function App() {
         const errorText = await res.text();
         throw new Error(errorText);
       }
-
+      
       const data = await res.json();
       const reply = data.message || "I don't have that information yet.";
-
+      
+      if (ENABLE_TEXT_TO_SPEECH) {
+        speakText(reply);
+     }
       setLatestAssistantText(reply);
-      setAvatarState("talking");
+      setAvatarState("idle");
       setStatusText("SYNK responded.");
 
-      speakText(reply);
+     
     } catch (error) {
       console.error("Text chat failed:", error);
       setAvatarState("error");
