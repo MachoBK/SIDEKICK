@@ -8,14 +8,18 @@ from dotenv import load_dotenv
 import os
 import tempfile
 import json
+import re
 
 from knowledge_db import load_json_to_db, search_knowledge
+from vector_index import query_index
 
 # =========================
 # SETUP
 # =========================
 load_dotenv()
+
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+conversation_memory = {}
 
 app = FastAPI()
 
@@ -39,6 +43,7 @@ class ChatRequest(BaseModel):
     personality: str = "calm_strategist"
     mode: str = "game"
     language: str = "English"
+    session_id: str = "default"
 
 # =========================
 # GAME FILTER
@@ -46,45 +51,73 @@ class ChatRequest(BaseModel):
 def is_game_related(message: str) -> bool:
     msg = message.lower()
 
-    game_keywords = [
-        "game", "games", "gaming", "quest", "mission", "boss", "character",
-        "npc", "weapon", "armor", "skill", "level", "map", "location",
-        "faction", "story", "lore", "chapter", "prologue", "enemy",
-        "combat", "ability", "reward", "item", "guide", "walkthrough",
-        "crimson", "desert", "kliff", "myurdin", "greymanes",
-        "black bears", "pywel", "hernand", "abyss", "freesword"
+    keywords = [
+        "game","quest","mission","boss","character","npc","weapon","armor",
+        "skill","level","map","location","faction","story","lore","enemy",
+        "combat","reward","item","guide","walkthrough",
+        "crimson","desert","kliff","macduff","hernand",
+        "battalion","army","clan","group"
     ]
 
-    return any(keyword in msg for keyword in game_keywords)
+    return any(k in msg for k in keywords)
 
 # =========================
 # KNOWLEDGE
 # =========================
 def build_knowledge_context(query: str) -> str:
-    results = search_knowledge(query, limit=5)
+    results = query_index(query, k=5)
+
+    # cutoff weak matches
+    results = [r for r in results if r.get("score", 0) >= 0.35]
 
     if not results:
         return ""
 
-    context = []
+    parts = []
 
     for item in results[:3]:
-        content = json.dumps(item.get("content", {}), indent=2)
+        content = item.get("content", {})
+        lines = []
 
-        if len(content) > 1500:
-            content = content[:1500] + "\n...[truncated]"
+        if isinstance(content, dict):
+            for k, v in content.items():
+                lines.append(f"{k}: {v}")
+        elif isinstance(content, list):
+            lines.extend([f"- {v}" for v in content])
+        else:
+            lines.append(str(content))
 
-        context.append(f"""
-Game: {item.get('game', 'Unknown')}
-Section: {item.get('section', 'Unknown')}
-Title: {item.get('title', 'Unknown')}
-Type: {item.get('type', 'Unknown')}
+        text = "\n".join(lines)
 
-Data:
-{content}
+        parts.append(f"""
+GAME: {item.get('game')}
+TITLE: {item.get('title')}
+TYPE: {item.get('type')}
+SCORE: {item.get('score'):.3f}
+
+{text}
 """)
 
-    return "\n\n".join(context)
+    return "\n\n---\n\n".join(parts)
+
+def extract_allowed_names(knowledge: str):
+    names = []
+    for line in knowledge.splitlines():
+        if ":" in line:
+            key, value = line.split(":", 1)
+            if key.lower() in ["name", "title"]:
+                names.append(value.strip().lower())
+    return names
+
+def contains_entity_claim(reply: str):
+    keywords = [
+        "battalion","faction","group","army","clan",
+        "guild","organization","order","tribe","crew",
+        "unit","force","company","squad","legion",
+        "leader","boss","character"
+    ]
+    r = reply.lower()
+    return any(k in r for k in keywords)
 
 # =========================
 # AI RESPONSE
@@ -98,28 +131,23 @@ def generate_response(message: str, personality: str, mode: str, language: str):
     if not knowledge:
         return "I don't have that information yet."
 
+    allowed_names = extract_allowed_names(knowledge)
+
     system_prompt = f"""
-You are SYNK, a futuristic AI sidekick designed ONLY for video games.
+You are SYNK, a video game AI.
 
-LANGUAGE RULE:
-- Respond ONLY in {language}.
-- Do not switch languages unless the selected language changes.
-
-STRICT RULES:
-- Only answer video game-related questions.
-- Only use the provided game knowledge.
-- Never guess or invent information.
-- Do not invent factions, characters, locations, quests, weapons, lore, or mechanics.
-- If the answer is not in the provided knowledge, say:
-  "I don't have that information yet."
+RULES:
+- ONLY use GAME KNOWLEDGE
+- NEVER invent names
+- If unsure → say: "I don't have that information yet."
 
 GAME KNOWLEDGE:
 {knowledge}
 """
 
-    response = client.chat.completions.create(
+    res = client.chat.completions.create(
         model="gpt-4o-mini",
-        temperature=0.1,
+        temperature=0,
         max_tokens=300,
         messages=[
             {"role": "system", "content": system_prompt},
@@ -127,7 +155,27 @@ GAME KNOWLEDGE:
         ],
     )
 
-    return response.choices[0].message.content.strip()
+    reply = res.choices[0].message.content.strip()
+    reply_lower = reply.lower()
+
+    # basic safety
+    unsafe = ["i don't know","not sure","maybe","probably"]
+    if any(u in reply_lower for u in unsafe):
+        return "I don't have that information yet."
+
+    # 🔥 FIXED HALLUCINATION GUARD
+    if contains_entity_claim(reply):
+        valid = False
+
+        for name in allowed_names:
+            if name in reply_lower:
+                valid = True
+                break
+
+        if not valid:
+            return "I don't have that information yet."
+
+    return reply
 
 # =========================
 # ROUTES
@@ -136,122 +184,31 @@ GAME KNOWLEDGE:
 def root():
     return {"status": "SYNK running"}
 
-@app.get("/knowledge/search")
-def knowledge_search(q: str):
-    try:
-        results = search_knowledge(q)
-        return {
-            "query": q,
-            "results": results
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
 @app.post("/chat")
 def chat(req: ChatRequest):
     try:
+        memory = conversation_memory.get(req.session_id, [])
+
+        context_message = req.message
+
+        if memory:
+            history = "\n".join([
+                f"User: {m['user']}\nSYNK: {m['assistant']}"
+                for m in memory[-3:]
+            ])
+            context_message = f"{history}\nUser: {req.message}"
+
         reply = generate_response(
-            req.message,
+            context_message,
             req.personality,
             req.mode,
             req.language
         )
 
-        return {
-            "message": reply,
-            "mode": req.mode,
-            "personality": req.personality,
-            "language": req.language
-        }
+        memory.append({"user": req.message, "assistant": reply})
+        conversation_memory[req.session_id] = memory[-5:]
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/realtime/session")
-def realtime_session(language: str = "English"):
-    try:
-        return client.realtime.client_secrets.create(
-            session={
-                "type": "realtime",
-                "model": "gpt-realtime",
-                "instructions": (
-                    "You are SYNK, a futuristic AI sidekick designed only for video games. "
-                    f"Always respond only in {language}. "
-                    "Do not answer general questions. "
-                    "If the user asks anything unrelated to video games, say: "
-                    "'I’m focused only on video game-related topics.' "
-                    "Do not guess game facts. "
-                    "If you do not have the answer, say: "
-                    "'I don't have that information yet.'"
-                ),
-                "audio": {
-                    "output": {"voice": "marin"}
-                },
-            }
-        )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.post("/voice")
-async def voice(
-    audio: UploadFile = File(...),
-    personality: str = Form("calm_strategist"),
-    mode: str = Form("game"),
-    language: str = Form("English"),
-):
-    temp_path = None
-
-    try:
-        data = await audio.read()
-
-        if not data:
-            raise HTTPException(status_code=400, detail="No audio received")
-
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp:
-            temp.write(data)
-            temp_path = temp.name
-
-        with open(temp_path, "rb") as f:
-            transcript_res = client.audio.transcriptions.create(
-                model="whisper-1",
-                file=f
-            )
-
-        transcript = transcript_res.text.strip()
-
-        reply = generate_response(
-            transcript,
-            personality,
-            mode,
-            language
-        )
-
-        return {
-            "transcript": transcript,
-            "message": reply,
-            "language": language
-        }
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-    finally:
-        if temp_path and os.path.exists(temp_path):
-            os.remove(temp_path)
-
-@app.post("/tts")
-async def tts(text: str = Form(...)):
-    try:
-        output_file = "synk.mp3"
-
-        with client.audio.speech.with_streaming_response.create(
-            model="gpt-4o-mini-tts",
-            voice="alloy",
-            input=text,
-        ) as res:
-            res.stream_to_file(output_file)
-
-        return FileResponse(output_file, media_type="audio/mpeg")
+        return {"message": reply}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -1,0 +1,679 @@
+[
+  {
+    "id": "crimson_desert_overview_prologue",
+    "type": "overview",
+    "game": "Crimson Desert",
+    "section": "Prologue",
+    "title": "Dead of Night Overview",
+    "content": {
+      "summary": "The Prologue introduces Kliff, leader of the Greymanes. His group is ambushed by the Black Bears. After being defeated and thrown into the Nas River, Kliff survives a mysterious experience in the Abyss and begins a new journey.",
+      "world": "Pywel",
+      "main_character": "Kliff"
+    }
+  },
+  {
+    "id": "crimson_desert_character_kliff",
+    "type": "character",
+    "game": "Crimson Desert",
+    "section": "Characters",
+    "title": "Kliff",
+    "content": {
+      "name": "Kliff",
+      "role": "Protagonist",
+      "description": "Kliff is the main character of Crimson Desert and a leader of the Greymanes.",
+      "traits": [
+        "strategic",
+        "skilled swordsman",
+        "leader"
+      ]
+    }
+  },
+  {
+    "id": "crimson_desert_character_myurdin",
+    "type": "character",
+    "game": "Crimson Desert",
+    "section": "Characters",
+    "title": "Myurdin",
+    "content": {
+      "name": "Myurdin",
+      "role": "Antagonist",
+      "description": "Myurdin leads the Black Bears and defeats Kliff during the Prologue.",
+      "traits": [
+        "brutal",
+        "power-driven"
+      ]
+    }
+  },
+  {
+    "id": "crimson_desert_character_oongka",
+    "type": "character",
+    "game": "Crimson Desert",
+    "section": "Characters",
+    "title": "Oongka",
+    "content": {
+      "name": "Oongka",
+      "role": "Ally",
+      "traits": [
+        "strong",
+        "loyal"
+      ]
+    }
+  },
+  {
+    "id": "crimson_desert_character_naira",
+    "type": "character",
+    "game": "Crimson Desert",
+    "section": "Characters",
+    "title": "Naira",
+    "content": {
+      "name": "Naira",
+      "role": "Ally",
+      "traits": [
+        "archer",
+        "survival expert"
+      ]
+    }
+  },
+  {
+    "id": "crimson_desert_character_yann",
+    "type": "character",
+    "game": "Crimson Desert",
+    "section": "Characters",
+    "title": "Yann",
+    "content": {
+      "name": "Yann",
+      "role": "Ally",
+      "traits": [
+        "reckless",
+        "skilled"
+      ]
+    }
+  },
+  {
+    "id": "crimson_desert_character_sebastian",
+    "type": "character",
+    "game": "Crimson Desert",
+    "section": "Characters",
+    "title": "Sebastian",
+    "content": {
+      "name": "Sebastian",
+      "role": "NPC",
+      "description": "Sebastian rescues and guides Kliff after the Abyss experience.",
+      "traits": [
+        "rescuer",
+        "guide"
+      ]
+    }
+  },
+  {
+    "id": "crimson_desert_faction_greymanes",
+    "type": "faction",
+    "game": "Crimson Desert",
+    "section": "Factions",
+    "title": "Greymanes",
+    "content": {
+      "name": "Greymanes",
+      "description": "Warriors who protect Pailune, composed of skilled individuals from diverse backgrounds.",
+      "known_member": "Kliff"
+    }
+  },
+  {
+    "id": "crimson_desert_faction_black_bears",
+    "type": "faction",
+    "game": "Crimson Desert",
+    "section": "Factions",
+    "title": "Black Bears",
+    "content": {
+      "name": "Black Bears",
+      "description": "A brutal rival faction led by Myurdin, driven by power and destruction.",
+      "leader": "Myurdin"
+    }
+  },
+  {
+    "id": "crimson_desert_quest_unfamiliar_lands",
+    "type": "quest",
+    "game": "Crimson Desert",
+    "section": "Prologue",
+    "title": "Unfamiliar Lands",
+    "content": {
+      "name": "Unfamiliar Lands",
+      "location": "Hills of No Return",
+      "objectives": [
+        "Go to the cabin",
+        "Speak with companions",
+        "Enter the hut",
+        "Defend against ambush"
+      ],
+      "outcome": "Black Bears attack, initiating combat tutorial."
+    }
+  },
+  {
+    "id": "crimson_desert_quest_in_ashes",
+    "type": "quest",
+    "game": "Crimson Desert",
+    "section": "Prologue",
+    "title": "In Ashes",
+    "content": {
+      "name": "In Ashes",
+      "location": "Nas River",
+      "objectives": [
+        "Defeat enemies",
+        "Protect allies",
+        "Fight Myurdin"
+      ],
+      "outcome": "Kliff is defeated and thrown into the river."
+    }
+  },
+  {
+    "id": "crimson_desert_quest_realm_of_uncertainty",
+    "type": "quest",
+    "game": "Crimson Desert",
+    "section": "Prologue",
+    "title": "Realm of Uncertainty",
+    "content": {
+      "name": "Realm of Uncertainty",
+      "location": "Corridor of the Void",
+      "objectives": [
+        "Navigate the corridor",
+        "Complete movement challenges"
+      ],
+      "outcome": "Kliff survives and gains mysterious power."
+    }
+  },
+  {
+    "id": "crimson_desert_quest_new_journey",
+    "type": "quest",
+    "game": "Crimson Desert",
+    "section": "Prologue",
+    "title": "New Journey",
+    "content": {
+      "name": "New Journey",
+      "location": "Tree Saints’ Falls",
+      "objectives": [
+        "Recover",
+        "Travel with Sebastian",
+        "Defeat bandits",
+        "Reach encampment"
+      ],
+      "outcome": "Prologue ends and Chapter 1 begins."
+    }
+  },
+  {
+    "id": "crimson_desert_location_hills_of_no_return",
+    "type": "location",
+    "game": "Crimson Desert",
+    "section": "Locations",
+    "title": "Hills of No Return",
+    "content": {
+      "name": "Hills of No Return",
+      "description": "Starting forest region near the Greymanes camp."
+    }
+  },
+  {
+    "id": "crimson_desert_location_nas_river",
+    "type": "location",
+    "game": "Crimson Desert",
+    "section": "Locations",
+    "title": "Nas River",
+    "content": {
+      "name": "Nas River",
+      "description": "River where Kliff is thrown and survives."
+    }
+  },
+  {
+    "id": "crimson_desert_location_corridor_of_the_void",
+    "type": "location",
+    "game": "Crimson Desert",
+    "section": "Locations",
+    "title": "Corridor of the Void",
+    "content": {
+      "name": "Corridor of the Void",
+      "description": "Mysterious realm between life and death."
+    }
+  },
+  {
+    "id": "crimson_desert_location_tree_saints_falls",
+    "type": "location",
+    "game": "Crimson Desert",
+    "section": "Locations",
+    "title": "Tree Saints’ Falls",
+    "content": {
+      "name": "Tree Saints’ Falls",
+      "description": "Location where Kliff recovers after the Abyss."
+    }
+  },
+  {
+    "id": "crimson_desert_location_freesword_encampment",
+    "type": "location",
+    "game": "Crimson Desert",
+    "section": "Locations",
+    "title": "Freesword Encampment",
+    "content": {
+      "name": "Freesword Encampment",
+      "description": "Safe zone marking the end of the Prologue and starting area for Chapter 1 near Hernand Castle. Contains a bed, storage, bonfire, animals, and NPCs."
+    }
+  },
+  {
+    "id": "crimson_desert_chapter_1_overview",
+    "type": "overview",
+    "game": "Crimson Desert",
+    "section": "Chapter 1",
+    "title": "The First Encounter - Hernand Town Overview",
+    "content": {
+      "summary": "Chapter 1 begins after Kliff reaches Hernand Town at the end of the Prologue. Pywel begins opening up, but the best route is to stay focused on the main story until Kliff gains more core abilities.",
+      "recommended_path": "Do not fully explore Hernand Town yet. Follow the Chapter 1 main quest chain first. Save deeper exploration for Chapter 2."
+    }
+  },
+  {
+    "id": "crimson_desert_chapter_1_main_quest_chain",
+    "type": "quest_chain",
+    "game": "Crimson Desert",
+    "section": "Chapter 1",
+    "title": "Chapter 1 Main Quest Chain",
+    "content": {
+      "quests": [
+        "Where Rumors Gather",
+        "Mysterious Man",
+        "True Wisdom in Kindness",
+        "Heart Beyond Borders",
+        "Actions Speak Louder Than Words",
+        "Mystical Key"
+      ]
+    }
+  },
+  {
+    "id": "crimson_desert_quest_where_rumors_gather",
+    "type": "quest",
+    "game": "Crimson Desert",
+    "section": "Chapter 1",
+    "title": "Where Rumors Gather",
+    "content": {
+      "name": "Where Rumors Gather",
+      "location": "Freesword Encampment / Hernand Tavern",
+      "objectives": [
+        "Check the Freesword Encampment",
+        "Use the bed and storage if needed",
+        "Cook at the bonfire",
+        "Activate the Abyss Nexus",
+        "Ring the Bell Tower bell",
+        "Enter Hernand Tavern",
+        "Speak with Dahlia"
+      ],
+      "outcome": "Kliff begins Chapter 1 and learns important town systems."
+    }
+  },
+  {
+    "id": "crimson_desert_quest_mysterious_man",
+    "type": "quest",
+    "game": "Crimson Desert",
+    "section": "Chapter 1",
+    "title": "Mysterious Man",
+    "content": {
+      "name": "Mysterious Man",
+      "location": "Near Hernand Sewers",
+      "objectives": [
+        "Leave Hernand Tavern",
+        "Find the sleeping beggar near the sewer entrance",
+        "Give him a coin"
+      ],
+      "reward": "Shabby Wooden Key",
+      "outcome": "The beggar vanishes mysteriously, revealing the event as part of a supernatural trial."
+    }
+  },
+  {
+    "id": "crimson_desert_quest_true_wisdom_in_kindness",
+    "type": "quest",
+    "game": "Crimson Desert",
+    "section": "Chapter 1",
+    "title": "True Wisdom in Kindness",
+    "content": {
+      "name": "True Wisdom in Kindness",
+      "location": "Hernand Sewers",
+      "objectives": [
+        "Enter the sewers",
+        "Loot the chest",
+        "Practice Precision Jumping",
+        "Free the tied-up Noble Woman"
+      ],
+      "reward": "Sealed Letter",
+      "outcome": "Another mystical kindness trial is completed."
+    }
+  },
+  {
+    "id": "crimson_desert_quest_heart_beyond_borders",
+    "type": "quest",
+    "game": "Crimson Desert",
+    "section": "Chapter 1",
+    "title": "Heart Beyond Borders",
+    "content": {
+      "name": "Heart Beyond Borders",
+      "location": "Near the Bell Tower",
+      "objectives": [
+        "Speak with Rulupee",
+        "Climb onto the roof",
+        "Rescue the black cat",
+        "Return the cat to Rulupee"
+      ],
+      "reward": "Shai’s Pendant",
+      "outcome": "Kliff helps Rulupee and earns another quest item."
+    }
+  },
+  {
+    "id": "crimson_desert_quest_actions_speak_louder_than_words",
+    "type": "quest",
+    "game": "Crimson Desert",
+    "section": "Chapter 1",
+    "title": "Actions Speak Louder Than Words",
+    "content": {
+      "name": "Actions Speak Louder Than Words",
+      "location": "Muckroot Ranch",
+      "objectives": [
+        "Find the smoking house",
+        "Pick up the broom",
+        "Climb to the roof",
+        "Clean the blocked chimney",
+        "Speak with Arlan"
+      ],
+      "rewards": [
+        "Inventory Expansion",
+        "Hernandian Attire"
+      ],
+      "outcome": "Kliff receives clothing needed to enter Hernand Castle."
+    }
+  },
+  {
+    "id": "crimson_desert_quest_mystical_key",
+    "type": "quest",
+    "game": "Crimson Desert",
+    "section": "Chapter 1",
+    "title": "Mystical Key",
+    "content": {
+      "name": "Mystical Key",
+      "location": "Hernand Castle / Alchemist’s Chamber",
+      "objectives": [
+        "Inspect the Shabby Wooden Key",
+        "Equip Hernandian Attire",
+        "Enter Hernand Castle",
+        "Reach the locked chamber on the second floor",
+        "Unlock the Alchemist’s Chamber",
+        "Open the treasure chest",
+        "Use the Lantern",
+        "Enter the Abyss Gate"
+      ],
+      "rewards": [
+        "Abyss Artifact",
+        "Faded Abyss Artifact"
+      ],
+      "outcome": "Kliff discovers the first Abyss Gate and travels to the Axiom Archive."
+    }
+  },
+  {
+    "id": "crimson_desert_location_abyss_nexus",
+    "type": "location",
+    "game": "Crimson Desert",
+    "section": "Locations",
+    "title": "Abyss Nexus",
+    "content": {
+      "name": "Abyss Nexus",
+      "description": "Fast travel point that should be activated when entering a new area."
+    }
+  },
+  {
+    "id": "crimson_desert_location_bell_tower",
+    "type": "location",
+    "game": "Crimson Desert",
+    "section": "Locations",
+    "title": "Bell Tower",
+    "content": {
+      "name": "Bell Tower",
+      "description": "Tower used to reveal surrounding map information and nearby points of interest."
+    }
+  },
+  {
+    "id": "crimson_desert_location_hernand_tavern",
+    "type": "location",
+    "game": "Crimson Desert",
+    "section": "Locations",
+    "title": "Hernand Tavern",
+    "content": {
+      "name": "Hernand Tavern",
+      "description": "Main quest destination where Kliff speaks with Dahlia and can play Arm Wrestling."
+    }
+  },
+  {
+    "id": "crimson_desert_location_hernand_sewers",
+    "type": "location",
+    "game": "Crimson Desert",
+    "section": "Locations",
+    "title": "Hernand Sewers",
+    "content": {
+      "name": "Hernand Sewers",
+      "description": "Small hidden area containing early gear, items, and a kindness trial."
+    }
+  },
+  {
+    "id": "crimson_desert_location_muckroot_ranch",
+    "type": "location",
+    "game": "Crimson Desert",
+    "section": "Locations",
+    "title": "Muckroot Ranch",
+    "content": {
+      "name": "Muckroot Ranch",
+      "description": "Location of the smoking house where Kliff helps Arlan and Lauren."
+    }
+  },
+  {
+    "id": "crimson_desert_location_hernand_castle",
+    "type": "location",
+    "game": "Crimson Desert",
+    "section": "Locations",
+    "title": "Hernand Castle",
+    "content": {
+      "name": "Hernand Castle",
+      "description": "Castle that Kliff can enter after equipping Hernandian Attire."
+    }
+  },
+  {
+    "id": "crimson_desert_location_alchemists_chamber",
+    "type": "location",
+    "game": "Crimson Desert",
+    "section": "Locations",
+    "title": "Alchemist’s Chamber",
+    "content": {
+      "name": "Alchemist’s Chamber",
+      "description": "Locked room opened with the Mystical Key. Contains Abyss rewards and an Abyss Gate."
+    }
+  },
+  {
+    "id": "crimson_desert_location_axiom_archive",
+    "type": "location",
+    "game": "Crimson Desert",
+    "section": "Locations",
+    "title": "Axiom Archive",
+    "content": {
+      "name": "Axiom Archive",
+      "description": "Abyss destination reached from the gate in the Alchemist’s Chamber."
+    }
+  },
+  {
+    "id": "crimson_desert_system_abyss_nexus",
+    "type": "system",
+    "game": "Crimson Desert",
+    "section": "Systems",
+    "title": "Abyss Nexus",
+    "content": {
+      "name": "Abyss Nexus",
+      "description": "Fast travel point. Activate it by standing on it, then use it from the map later."
+    }
+  },
+  {
+    "id": "crimson_desert_system_bells",
+    "type": "system",
+    "game": "Crimson Desert",
+    "section": "Systems",
+    "title": "Bells",
+    "content": {
+      "name": "Bells",
+      "description": "Map-revealing towers. Ringing a bell clears nearby fog of war and reveals points of interest."
+    }
+  },
+  {
+    "id": "crimson_desert_system_faction_quests",
+    "type": "system",
+    "game": "Crimson Desert",
+    "section": "Systems",
+    "title": "Faction Quests",
+    "content": {
+      "name": "Faction Quests",
+      "description": "Optional reputation-based missions tied to groups across Pywel."
+    }
+  },
+  {
+    "id": "crimson_desert_system_notice_boards",
+    "type": "system",
+    "game": "Crimson Desert",
+    "section": "Systems",
+    "title": "Notice Boards",
+    "content": {
+      "name": "Notice Boards",
+      "description": "Boards that offer bounties, commissions, vendor leads, and clue-based tasks."
+    }
+  },
+  {
+    "id": "crimson_desert_system_abyss_gate",
+    "type": "system",
+    "game": "Crimson Desert",
+    "section": "Systems",
+    "title": "Abyss Gate",
+    "content": {
+      "name": "Abyss Gate",
+      "description": "One-way portal from Pywel into the Abyss."
+    }
+  },
+  {
+    "id": "crimson_desert_system_abyss_artifact",
+    "type": "system",
+    "game": "Crimson Desert",
+    "section": "Systems",
+    "title": "Abyss Artifact",
+    "content": {
+      "name": "Abyss Artifact",
+      "description": "Used to gain Skill Points or improve stats such as Health, Stamina, and Spirit."
+    }
+  },
+  {
+    "id": "crimson_desert_system_faded_abyss_artifact",
+    "type": "system",
+    "game": "Crimson Desert",
+    "section": "Systems",
+    "title": "Faded Abyss Artifact",
+    "content": {
+      "name": "Faded Abyss Artifact",
+      "description": "Respec item that lets Kliff reset the skill tree."
+    }
+  },
+  {
+    "id": "crimson_desert_system_hidden_spaces",
+    "type": "system",
+    "game": "Crimson Desert",
+    "section": "Systems",
+    "title": "Hidden Spaces",
+    "content": {
+      "name": "Hidden Spaces",
+      "description": "Secret areas containing trials, gear, puzzles, or lore."
+    }
+  },
+  {
+    "id": "crimson_desert_system_memory_fragments",
+    "type": "system",
+    "game": "Crimson Desert",
+    "section": "Systems",
+    "title": "Memory Fragments",
+    "content": {
+      "name": "Memory Fragments",
+      "description": "Past visions triggered with the Visione helmet."
+    }
+  },
+  {
+    "id": "crimson_desert_system_learn_skill",
+    "type": "system",
+    "game": "Crimson Desert",
+    "section": "Systems",
+    "title": "Learn Skill",
+    "content": {
+      "name": "Learn Skill",
+      "description": "Some abilities are learned by observing Echoes, NPCs, or enemies."
+    }
+  },
+  {
+    "id": "crimson_desert_system_mounts",
+    "type": "system",
+    "game": "Crimson Desert",
+    "section": "Systems",
+    "title": "Mounts",
+    "content": {
+      "name": "Mounts",
+      "description": "Permanent rideable creatures and machines such as horses, dragons, wyverns, raptors, and mechs."
+    }
+  },
+  {
+    "id": "crimson_desert_minigame_arm_wrestling",
+    "type": "minigame",
+    "game": "Crimson Desert",
+    "section": "Minigames",
+    "title": "Arm Wrestling",
+    "content": {
+      "name": "Arm Wrestling",
+      "location": "Hernand Tavern",
+      "steps": [
+        "Start the match",
+        "Wait for the countdown",
+        "Tap the action key repeatedly",
+        "Watch the timing circle",
+        "Press the timing key when the needle reaches the highlighted area",
+        "Repeat until the opponent loses"
+      ],
+      "outcome": "Winning gives Kliff early money and introduces tavern minigames."
+    }
+  },
+  {
+    "id": "crimson_desert_rewards_chapter_1",
+    "type": "rewards",
+    "game": "Crimson Desert",
+    "section": "Chapter 1",
+    "title": "Important Chapter 1 Rewards",
+    "content": {
+      "important_rewards": [
+        "Shabby Wooden Key",
+        "Helmet",
+        "Sealed Letter",
+        "Shai’s Pendant",
+        "Inventory Expansion",
+        "Hernandian Attire",
+        "Abyss Artifact",
+        "Faded Abyss Artifact"
+      ]
+    }
+  },
+  {
+    "id": "crimson_desert_timeline_prologue",
+    "type": "timeline",
+    "game": "Crimson Desert",
+    "section": "Prologue",
+    "title": "Prologue Timeline",
+    "content": {
+      "timeline": [
+        "Kliff starts in wilderness",
+        "Meets Greymanes",
+        "Ambush occurs",
+        "Battle escalates",
+        "Defeated by Myurdin",
+        "Falls into river",
+        "Enters Abyss",
+        "Escapes with power",
+        "Rescued by Sebastian",
+        "Begins new journey"
+      ]
+    }
+  }
+]

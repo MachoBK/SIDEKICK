@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import SynkWaterBackground from "./components/SynkWaterBackground";
 
 const API_BASE_URL = "http://127.0.0.1:8000";
+const ENABLE_TEXT_TO_SPEECH = false;
 
 const LANGUAGES = {
   English: { label: "English", voiceCode: "en-US" },
@@ -57,20 +58,19 @@ export default function App() {
 
       if (!res.ok) {
         const errorText = await res.text();
-        throw new Error(errorText);
+        throw new Error(errorText || "Text chat failed.");
       }
-      
+
       const data = await res.json();
-      const reply = data.message || "I don't have that information yet.";
-      
-      if (ENABLE_TEXT_TO_SPEECH) {
-        speakText(reply);
-     }
+      const reply = data.message || data.reply || "I don't have that information yet.";
+
       setLatestAssistantText(reply);
       setAvatarState("idle");
       setStatusText("SYNK responded.");
 
-     
+      if (ENABLE_TEXT_TO_SPEECH) {
+        speakText(reply);
+      }
     } catch (error) {
       console.error("Text chat failed:", error);
       setAvatarState("error");
@@ -89,7 +89,8 @@ export default function App() {
   }
 
   function handleInputKeyDown(event) {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
       sendTypedMessage();
     }
   }
@@ -112,9 +113,7 @@ export default function App() {
       voice.lang.toLowerCase().startsWith(selectedVoiceCode.toLowerCase().slice(0, 2))
     );
 
-    if (matchingVoice) {
-      utterance.voice = matchingVoice;
-    }
+    if (matchingVoice) utterance.voice = matchingVoice;
 
     utterance.onstart = () => {
       setAvatarState("talking");
@@ -134,6 +133,40 @@ export default function App() {
     window.speechSynthesis.speak(utterance);
   }
 
+  function stopRealtime() {
+    if (dcRef.current) {
+      try {
+        dcRef.current.close();
+      } catch {}
+      dcRef.current = null;
+    }
+
+    if (pcRef.current) {
+      try {
+        pcRef.current.close();
+      } catch {}
+      pcRef.current = null;
+    }
+
+    if (micStreamRef.current) {
+      micStreamRef.current.getTracks().forEach((track) => track.stop());
+      micStreamRef.current = null;
+    }
+
+    if (remoteAudioRef.current) {
+      try {
+        remoteAudioRef.current.pause();
+        remoteAudioRef.current.srcObject = null;
+      } catch {}
+      remoteAudioRef.current = null;
+    }
+
+    setIsConnected(false);
+    setIsConnecting(false);
+    setAvatarState("idle");
+    setStatusText("Ready.");
+  }
+
   async function startRealtime() {
     if (isConnected || isConnecting) return;
 
@@ -143,17 +176,16 @@ export default function App() {
       setStatusText("Connecting realtime voice...");
 
       const sessionRes = await fetch(
-        `${API_BASE_URL}/realtime/session?language=${encodeURIComponent(language)}`,
-        { method: "GET" }
+        `${API_BASE_URL}/realtime/session?language=${encodeURIComponent(language)}`
       );
 
       if (!sessionRes.ok) {
         const errorText = await sessionRes.text();
-        throw new Error(errorText);
+        throw new Error(errorText || "Could not create realtime session.");
       }
 
       const sessionData = await sessionRes.json();
-      const ephemeralKey = sessionData.value;
+      const ephemeralKey = sessionData.value || sessionData.client_secret?.value;
 
       if (!ephemeralKey) {
         throw new Error("No realtime client secret returned.");
@@ -211,7 +243,9 @@ export default function App() {
           }
 
           if (msg.type === "response.audio_transcript.delta") {
-            if (msg.delta) setLatestAssistantText((prev) => prev + msg.delta);
+            if (msg.delta) {
+              setLatestAssistantText((prev) => prev + msg.delta);
+            }
           }
 
           if (msg.type === "response.audio.done" || msg.type === "response.done") {
@@ -228,8 +262,18 @@ export default function App() {
             );
           }
         } catch {
-          // Ignore non-JSON events
+          // Ignore non-JSON events.
         }
+      };
+
+      dc.onerror = () => {
+        setAvatarState("error");
+        setStatusText("Realtime connection error.");
+      };
+
+      dc.onclose = () => {
+        setIsConnected(false);
+        setIsConnecting(false);
       };
 
       const offer = await pc.createOffer();
@@ -246,7 +290,7 @@ export default function App() {
 
       if (!sdpRes.ok) {
         const errorText = await sdpRes.text();
-        throw new Error(errorText);
+        throw new Error(errorText || "Realtime SDP request failed.");
       }
 
       const answerSdp = await sdpRes.text();
@@ -257,47 +301,11 @@ export default function App() {
       });
     } catch (error) {
       console.error("Realtime failed:", error);
-      setIsConnecting(false);
-      setIsConnected(false);
+      setLatestAssistantText(`Realtime error: ${error.message}`);
       setAvatarState("error");
       setStatusText("Realtime failed.");
-      setLatestAssistantText(`Realtime error: ${error.message}`);
       stopRealtime();
     }
-  }
-
-  function stopRealtime() {
-    if (dcRef.current) {
-      try {
-        dcRef.current.close();
-      } catch {}
-      dcRef.current = null;
-    }
-
-    if (pcRef.current) {
-      try {
-        pcRef.current.close();
-      } catch {}
-      pcRef.current = null;
-    }
-
-    if (micStreamRef.current) {
-      micStreamRef.current.getTracks().forEach((track) => track.stop());
-      micStreamRef.current = null;
-    }
-
-    if (remoteAudioRef.current) {
-      try {
-        remoteAudioRef.current.pause();
-        remoteAudioRef.current.srcObject = null;
-      } catch {}
-      remoteAudioRef.current = null;
-    }
-
-    setIsConnected(false);
-    setIsConnecting(false);
-    setAvatarState("idle");
-    setStatusText("Ready.");
   }
 
   function toggleRealtime() {
@@ -313,7 +321,7 @@ export default function App() {
     setLanguage(selectedLanguage);
     setStatusText(`Language set to ${selectedLanguage}.`);
 
-    if (isConnected) {
+    if (isConnected || isConnecting) {
       stopRealtime();
     }
   }
@@ -331,8 +339,7 @@ export default function App() {
     : language;
 
   const orbClass = useMemo(() => {
-    if (isConnecting) return "thinking";
-    if (isSending) return "thinking";
+    if (isConnecting || isSending) return "thinking";
     if (isConnected && avatarState === "talking") return "talking";
     if (isConnected) return "listening";
     return avatarState;
@@ -881,6 +888,7 @@ export default function App() {
             <div className="synk-avatar-core">
               <div className={`synk-orb ${orbClass}`}>
                 <div className="synk-orb-word">SYNK</div>
+
                 <div className="synk-wave">
                   <span />
                   <span />
@@ -933,9 +941,7 @@ export default function App() {
             <button
               className={`synk-mic-button ${isConnected ? "active" : ""}`}
               onClick={toggleRealtime}
-              aria-label={
-                isConnected ? "Stop realtime voice" : "Start realtime voice"
-              }
+              aria-label={isConnected ? "Stop realtime voice" : "Start realtime voice"}
               title={isConnected ? "Stop realtime voice" : "Start realtime voice"}
             >
               <svg
