@@ -1,20 +1,135 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import SynkWaterBackground from "./components/SynkWaterBackground";
 
+const API_BASE_URL = "http://127.0.0.1:8000";
+
+const LANGUAGES = {
+  English: { label: "English", voiceCode: "en-US" },
+  Spanish: { label: "Spanish", voiceCode: "es-ES" },
+  French: { label: "French", voiceCode: "fr-FR" },
+  Japanese: { label: "Japanese", voiceCode: "ja-JP" },
+};
+
 export default function App() {
   const [avatarState, setAvatarState] = useState("idle");
   const [statusText, setStatusText] = useState("Ready.");
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
+
+  const [language, setLanguage] = useState("English");
   const [latestUserText, setLatestUserText] = useState("");
   const [latestAssistantText, setLatestAssistantText] = useState(
-    "How can I help you today?"
+    "Ask me about a video game."
   );
+
+  const [inputText, setInputText] = useState("");
+  const [isSending, setIsSending] = useState(false);
 
   const pcRef = useRef(null);
   const dcRef = useRef(null);
   const micStreamRef = useRef(null);
   const remoteAudioRef = useRef(null);
+
+  async function sendTypedMessage() {
+    const cleanMessage = inputText.trim();
+    if (!cleanMessage || isSending) return;
+
+    setInputText("");
+    setLatestUserText(cleanMessage);
+    setLatestAssistantText("");
+    setIsSending(true);
+    setAvatarState("thinking");
+    setStatusText("Thinking...");
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: cleanMessage,
+          personality: "calm_strategist",
+          mode: "game",
+          language,
+        }),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText);
+      }
+
+      const data = await res.json();
+      const reply = data.message || "I don't have that information yet.";
+
+      setLatestAssistantText(reply);
+      setAvatarState("talking");
+      setStatusText("SYNK responded.");
+
+      speakText(reply);
+    } catch (error) {
+      console.error("Text chat failed:", error);
+      setAvatarState("error");
+      setStatusText("Text chat failed.");
+      setLatestAssistantText(`Error: ${error.message}`);
+    } finally {
+      setIsSending(false);
+
+      setTimeout(() => {
+        if (!isConnected) {
+          setAvatarState("idle");
+          setStatusText("Ready.");
+        }
+      }, 1200);
+    }
+  }
+
+  function handleInputKeyDown(event) {
+    if (event.key === "Enter") {
+      sendTypedMessage();
+    }
+  }
+
+  function speakText(text) {
+    if (!text || !window.speechSynthesis) return;
+
+    window.speechSynthesis.cancel();
+
+    const selectedVoiceCode = LANGUAGES[language]?.voiceCode || "en-US";
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    utterance.lang = selectedVoiceCode;
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    const voices = window.speechSynthesis.getVoices();
+    const matchingVoice = voices.find((voice) =>
+      voice.lang.toLowerCase().startsWith(selectedVoiceCode.toLowerCase().slice(0, 2))
+    );
+
+    if (matchingVoice) {
+      utterance.voice = matchingVoice;
+    }
+
+    utterance.onstart = () => {
+      setAvatarState("talking");
+      setStatusText("SYNK is speaking...");
+    };
+
+    utterance.onend = () => {
+      if (isConnected) {
+        setAvatarState("listening");
+        setStatusText("Realtime on. Speak naturally.");
+      } else {
+        setAvatarState("idle");
+        setStatusText("Ready.");
+      }
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }
 
   async function startRealtime() {
     if (isConnected || isConnecting) return;
@@ -25,10 +140,8 @@ export default function App() {
       setStatusText("Connecting realtime voice...");
 
       const sessionRes = await fetch(
-        "https://sidekick-p0n2.onrender.com/realtime/session",
-        {
-          method: "GET",
-        }
+        `${API_BASE_URL}/realtime/session?language=${encodeURIComponent(language)}`,
+        { method: "GET" }
       );
 
       if (!sessionRes.ok) {
@@ -84,12 +197,8 @@ export default function App() {
         try {
           const msg = JSON.parse(event.data);
 
-          if (
-            msg.type === "conversation.item.input_audio_transcription.completed"
-          ) {
-            if (msg.transcript) {
-              setLatestUserText(msg.transcript);
-            }
+          if (msg.type === "conversation.item.input_audio_transcription.completed") {
+            if (msg.transcript) setLatestUserText(msg.transcript);
           }
 
           if (msg.type === "response.created") {
@@ -99,17 +208,10 @@ export default function App() {
           }
 
           if (msg.type === "response.audio_transcript.delta") {
-            if (msg.delta) {
-              setLatestAssistantText((prev) => prev + msg.delta);
-            }
+            if (msg.delta) setLatestAssistantText((prev) => prev + msg.delta);
           }
 
-          if (msg.type === "response.audio.done") {
-            setAvatarState("listening");
-            setStatusText("Listening...");
-          }
-
-          if (msg.type === "response.done") {
+          if (msg.type === "response.audio.done" || msg.type === "response.done") {
             setAvatarState("listening");
             setStatusText("Realtime on. Speak naturally.");
           }
@@ -203,6 +305,16 @@ export default function App() {
     }
   }
 
+  function handleLanguageChange(event) {
+    const selectedLanguage = event.target.value;
+    setLanguage(selectedLanguage);
+    setStatusText(`Language set to ${selectedLanguage}.`);
+
+    if (isConnected) {
+      stopRealtime();
+    }
+  }
+
   useEffect(() => {
     return () => stopRealtime();
   }, []);
@@ -213,14 +325,15 @@ export default function App() {
     ? "Realtime"
     : avatarState === "talking"
     ? "Speaking"
-    : "Online";
+    : language;
 
   const orbClass = useMemo(() => {
     if (isConnecting) return "thinking";
+    if (isSending) return "thinking";
     if (isConnected && avatarState === "talking") return "talking";
     if (isConnected) return "listening";
     return avatarState;
-  }, [avatarState, isConnected, isConnecting]);
+  }, [avatarState, isConnected, isConnecting, isSending]);
 
   return (
     <div className="synk-shell">
@@ -259,6 +372,7 @@ export default function App() {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          gap: 18px;
         }
 
         .synk-logo {
@@ -281,6 +395,24 @@ export default function App() {
           text-shadow:
             0 0 16px rgba(0, 225, 255, 0.65),
             0 0 42px rgba(0, 120, 255, 0.34);
+        }
+
+        .synk-language-select {
+          padding: 13px 18px;
+          border-radius: 999px;
+          border: 1px solid rgba(138, 239, 255, 0.5);
+          background: rgba(2, 10, 24, 0.5);
+          color: #e8fbff;
+          outline: none;
+          backdrop-filter: blur(18px);
+          box-shadow:
+            0 0 26px rgba(0, 225, 255, 0.14),
+            inset 0 0 18px rgba(0, 225, 255, 0.06);
+        }
+
+        .synk-language-select option {
+          background: #020512;
+          color: #e8fbff;
         }
 
         .synk-main {
@@ -306,8 +438,8 @@ export default function App() {
         .synk-avatar-wrap {
           position: relative;
           width: min(650px, 100%);
-          height: min(42vh, 450px);
-          min-height: 260px;
+          height: min(38vh, 410px);
+          min-height: 240px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -419,6 +551,10 @@ export default function App() {
           animation: orbThinking 1.1s ease-in-out infinite;
         }
 
+        .synk-orb.error {
+          animation: orbError 0.8s ease-in-out infinite;
+        }
+
         .synk-wave {
           position: absolute;
           bottom: 18%;
@@ -457,17 +593,20 @@ export default function App() {
 
         .synk-chat-panel {
           width: min(760px, 90vw);
-          max-height: 185px;
+          max-height: 170px;
           overflow-y: auto;
           padding: 18px 24px;
           color: #d1f5ff;
-          font-size: clamp(1rem, 1.2vw, 1.25rem);
-          line-height: 1.65;
+          font-size: clamp(1rem, 1.2vw, 1.2rem);
+          line-height: 1.6;
           text-align: left;
           background: rgba(2, 10, 24, 0.35);
           border: 1px solid rgba(125, 211, 252, 0.18);
           border-radius: 24px;
           backdrop-filter: blur(16px);
+          box-shadow:
+            0 0 40px rgba(0, 180, 255, 0.08),
+            inset 0 0 22px rgba(0, 225, 255, 0.035);
         }
 
         .synk-chat-row {
@@ -489,8 +628,65 @@ export default function App() {
           color: #e8fbff;
         }
 
+        .synk-input-row {
+          width: min(760px, 90vw);
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 10px;
+          border-radius: 999px;
+          border: 1px solid rgba(125, 211, 252, 0.18);
+          background: rgba(2, 10, 24, 0.36);
+          backdrop-filter: blur(18px);
+          box-shadow:
+            0 0 30px rgba(0, 180, 255, 0.08),
+            inset 0 0 24px rgba(0, 225, 255, 0.035);
+        }
+
+        .synk-text-input {
+          flex: 1;
+          min-width: 0;
+          border: none;
+          outline: none;
+          background: transparent;
+          color: #e8fbff;
+          padding: 14px 18px;
+          font-size: 1rem;
+        }
+
+        .synk-text-input::placeholder {
+          color: rgba(209, 245, 255, 0.55);
+        }
+
+        .synk-send-button {
+          border: 1px solid rgba(138, 239, 255, 0.65);
+          background:
+            radial-gradient(circle at 50% 30%, rgba(184, 246, 255, 0.3), rgba(0, 180, 255, 0.16) 48%, rgba(2, 8, 22, 0.9) 100%);
+          color: #e9fbff;
+          min-width: 92px;
+          padding: 13px 18px;
+          border-radius: 999px;
+          cursor: pointer;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          box-shadow:
+            0 0 22px rgba(0, 225, 255, 0.28),
+            inset 0 0 18px rgba(0, 225, 255, 0.08);
+          transition: transform 180ms ease, opacity 180ms ease;
+        }
+
+        .synk-send-button:hover {
+          transform: scale(1.04);
+        }
+
+        .synk-send-button:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          transform: none;
+        }
+
         .synk-mic-wrap {
-          margin-top: 8px;
+          margin-top: 4px;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -499,8 +695,8 @@ export default function App() {
 
         .synk-mic-button {
           position: relative;
-          width: 132px;
-          height: 132px;
+          width: 118px;
+          height: 118px;
           border-radius: 999px;
           border: 2px solid rgba(138, 239, 255, 0.8);
           background:
@@ -546,8 +742,8 @@ export default function App() {
         }
 
         .synk-mic-icon {
-          width: 48px;
-          height: 48px;
+          width: 44px;
+          height: 44px;
         }
 
         .synk-status {
@@ -597,6 +793,11 @@ export default function App() {
           50% { transform: rotate(1deg) scale(1.06); filter: hue-rotate(25deg); }
         }
 
+        @keyframes orbError {
+          0%, 100% { transform: scale(1); filter: hue-rotate(120deg) brightness(1.15); }
+          50% { transform: scale(1.06); filter: hue-rotate(160deg) brightness(1.35); }
+        }
+
         @keyframes orbRipple {
           0%, 100% { transform: scale(0.92); opacity: 0.28; }
           50% { transform: scale(1.15); opacity: 0.72; }
@@ -624,17 +825,25 @@ export default function App() {
           }
 
           .synk-main {
-            padding-top: 150px;
+            padding-top: 142px;
           }
 
           .synk-avatar-wrap {
-            min-height: 240px;
-            height: 35vh;
+            min-height: 220px;
+            height: 32vh;
           }
 
           .synk-mic-button {
-            width: 108px;
-            height: 108px;
+            width: 100px;
+            height: 100px;
+          }
+
+          .synk-input-row {
+            border-radius: 24px;
+          }
+
+          .synk-send-button {
+            min-width: 76px;
           }
         }
       `}</style>
@@ -645,6 +854,20 @@ export default function App() {
         <div className="synk-logo">
           <h1>SYNK</h1>
         </div>
+
+        <select
+          className="synk-language-select"
+          value={language}
+          onChange={handleLanguageChange}
+          disabled={isConnected || isConnecting}
+          title={isConnected ? "Stop realtime voice before changing language" : "Choose language"}
+        >
+          {Object.keys(LANGUAGES).map((lang) => (
+            <option key={lang} value={lang}>
+              {LANGUAGES[lang].label}
+            </option>
+          ))}
+        </select>
       </header>
 
       <main className="synk-main">
@@ -678,8 +901,29 @@ export default function App() {
 
             <div className="synk-chat-row">
               <span className="synk-chat-label">SYNK:</span>
-              <span className="synk-chat-text">{latestAssistantText}</span>
+              <span className="synk-chat-text">
+                {latestAssistantText || "Thinking..."}
+              </span>
             </div>
+          </div>
+
+          <div className="synk-input-row">
+            <input
+              className="synk-text-input"
+              value={inputText}
+              onChange={(event) => setInputText(event.target.value)}
+              onKeyDown={handleInputKeyDown}
+              placeholder={`Ask SYNK about a game in ${language}...`}
+              disabled={isSending}
+            />
+
+            <button
+              className="synk-send-button"
+              onClick={sendTypedMessage}
+              disabled={isSending || !inputText.trim()}
+            >
+              {isSending ? "..." : "Send"}
+            </button>
           </div>
 
           <div className="synk-mic-wrap">
