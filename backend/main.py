@@ -10,18 +10,17 @@ import os
 import tempfile
 import json
 
-# 🔥 KNOWLEDGE SYSTEM
 from knowledge_db import load_json_to_db, search_knowledge
 
 # =========================
 # SETUP
 # =========================
 load_dotenv()
+
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 app = FastAPI()
 
-# CORS (allow frontend)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -30,10 +29,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Static audio folder
 app.mount("/audio", StaticFiles(directory="."), name="audio")
 
-# Load knowledge into SQLite at startup
 load_json_to_db()
 
 # =========================
@@ -55,15 +52,22 @@ def build_knowledge_context(query: str) -> str:
 
     context = []
 
+    # Only use top 3 chunks to save tokens
     for item in results[:3]:
+        content = json.dumps(item.get("content", {}), indent=2)
+
+        # Limit each chunk so we do not waste tokens
+        if len(content) > 1800:
+            content = content[:1800] + "\n...[truncated]"
+
         context.append(
             f"""
-Game: {item['game']}
-Section: {item['section']}
-Title: {item['title']}
+Game: {item.get('game', 'Unknown')}
+Section: {item.get('section', 'Unknown')}
+Title: {item.get('title', 'Unknown')}
 
 Data:
-{json.dumps(item['content'], indent=2)}
+{content}
 """
         )
 
@@ -75,23 +79,34 @@ Data:
 def generate_response(message: str, personality: str, mode: str):
     knowledge = build_knowledge_context(message)
 
+    if not knowledge:
+        knowledge = "NO_RELEVANT_KNOWLEDGE_FOUND"
+
     system_prompt = f"""
-You are SYNK, a futuristic AI sidekick.
+You are SYNK, a futuristic AI sidekick for video games.
 
 Always respond in English.
+
 Personality: {personality}
 Mode: {mode}
 
-Use the knowledge below ONLY if it is relevant.
+STRICT RULES:
+- Use ONLY the provided knowledge when answering game-specific questions.
+- Do NOT guess.
+- Do NOT invent factions, characters, locations, quests, weapons, lore, or mechanics.
+- If the knowledge does not contain the answer, say: "I don't have that information yet."
+- If the user asks a general non-game question, you may answer normally.
+- Keep responses clear, natural, and conversational.
+- Be concise unless the user asks for detail.
 
-KNOWLEDGE:
+GAME KNOWLEDGE:
 {knowledge}
-
-Keep responses clear, natural, and conversational.
 """
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
+        temperature=0.2,
+        max_tokens=350,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": message},
@@ -103,12 +118,10 @@ Keep responses clear, natural, and conversational.
 # =========================
 # ROUTES
 # =========================
-
 @app.get("/")
 def root():
     return {"status": "SYNK backend running"}
 
-# 🔥 THIS IS THE ROUTE YOU WERE MISSING / TESTING
 @app.get("/knowledge/search")
 def knowledge_search(q: str):
     try:
@@ -120,7 +133,6 @@ def knowledge_search(q: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# REALTIME SESSION
 @app.get("/realtime/session")
 def realtime_session():
     try:
@@ -129,8 +141,9 @@ def realtime_session():
                 "type": "realtime",
                 "model": "gpt-realtime",
                 "instructions": (
-                    "You are SYNK, a futuristic AI assistant. "
-                    "Speak clearly in English with a natural tone."
+                    "You are SYNK, a futuristic AI sidekick. "
+                    "Speak clearly in English with a natural tone. "
+                    "Do not guess game facts. If you do not know, say you do not have that information yet."
                 ),
                 "audio": {
                     "output": {"voice": "marin"}
@@ -140,7 +153,6 @@ def realtime_session():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# CHAT
 @app.post("/chat")
 def chat(req: ChatRequest):
     try:
@@ -151,10 +163,10 @@ def chat(req: ChatRequest):
             "mode": req.mode,
             "personality": req.personality
         }
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# VOICE
 @app.post("/voice")
 async def voice(
     audio: UploadFile = File(...),
@@ -197,7 +209,6 @@ async def voice(
         if temp_path and os.path.exists(temp_path):
             os.remove(temp_path)
 
-# TEXT TO SPEECH
 @app.post("/tts")
 async def tts(text: str = Form(...)):
     try:
