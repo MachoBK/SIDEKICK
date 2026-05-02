@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import SynkWaterBackground from "./components/SynkWaterBackground";
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://synk-backend.onrender.com";
 const ENABLE_TEXT_TO_SPEECH = false;
 
 const LANGUAGES = {
