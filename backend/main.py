@@ -9,6 +9,7 @@ import os
 import tempfile
 import json
 import re
+import httpx
 
 from knowledge_db import load_json_to_db, search_knowledge
 from vector_index import query_index
@@ -18,7 +19,9 @@ from vector_index import query_index
 # =========================
 load_dotenv()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+client = OpenAI(api_key=OPENAI_API_KEY)
 conversation_memory = {}
 
 app = FastAPI()
@@ -210,5 +213,53 @@ def chat(req: ChatRequest):
 
         return {"message": reply}
 
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/realtime/session")
+async def create_realtime_session(language: str = "English"):
+    try:
+        if not OPENAI_API_KEY:
+            raise HTTPException(
+                status_code=500,
+                detail="OPENAI_API_KEY is missing from backend environment variables."
+            )
+
+        instructions = f"""
+You are SYNK, a calm video game AI assistant.
+
+RULES:
+- Speak in {language}.
+- Stay focused on video game-related topics.
+- Do not guess.
+- Do not invent names, factions, characters, bosses, items, or locations.
+- If you do not know something, say: "I don't have that information yet."
+- Keep answers clear, calm, and useful.
+"""
+
+        async with httpx.AsyncClient(timeout=30.0) as http_client:
+            response = await http_client.post(
+                "https://api.openai.com/v1/realtime/sessions",
+                headers={
+                    "Authorization": f"Bearer {OPENAI_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": "gpt-4o-realtime-preview",
+                    "voice": "alloy",
+                    "instructions": instructions,
+                },
+            )
+
+        if response.status_code >= 400:
+            raise HTTPException(
+                status_code=response.status_code,
+                detail=response.text
+            )
+
+        return response.json()
+
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
