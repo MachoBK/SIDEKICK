@@ -30,6 +30,16 @@ export default function App() {
   const dcRef = useRef(null);
   const micStreamRef = useRef(null);
   const remoteAudioRef = useRef(null);
+  const mountedRef = useRef(true);
+
+  async function readErrorMessage(res, fallback) {
+    try {
+      const text = await res.text();
+      return text || fallback;
+    } catch {
+      return fallback;
+    }
+  }
 
   async function sendTypedMessage() {
     const cleanMessage = inputText.trim();
@@ -57,12 +67,13 @@ export default function App() {
       });
 
       if (!res.ok) {
-        const errorText = await res.text();
-        throw new Error(errorText || "Text chat failed.");
+        const errorText = await readErrorMessage(res, "Text chat failed.");
+        throw new Error(errorText);
       }
 
       const data = await res.json();
-      const reply = data.message || data.reply || "I don't have that information yet.";
+      const reply =
+        data.message || data.reply || "I don't have that information yet.";
 
       setLatestAssistantText(reply);
       setAvatarState("idle");
@@ -80,7 +91,7 @@ export default function App() {
       setIsSending(false);
 
       setTimeout(() => {
-        if (!isConnected) {
+        if (mountedRef.current && !isConnected) {
           setAvatarState("idle");
           setStatusText("Ready.");
         }
@@ -110,7 +121,9 @@ export default function App() {
 
     const voices = window.speechSynthesis.getVoices();
     const matchingVoice = voices.find((voice) =>
-      voice.lang.toLowerCase().startsWith(selectedVoiceCode.toLowerCase().slice(0, 2))
+      voice.lang
+        .toLowerCase()
+        .startsWith(selectedVoiceCode.toLowerCase().slice(0, 2))
     );
 
     if (matchingVoice) utterance.voice = matchingVoice;
@@ -143,6 +156,11 @@ export default function App() {
 
     if (pcRef.current) {
       try {
+        pcRef.current.getSenders().forEach((sender) => {
+          try {
+            sender.track?.stop();
+          } catch {}
+        });
         pcRef.current.close();
       } catch {}
       pcRef.current = null;
@@ -171,28 +189,52 @@ export default function App() {
     if (isConnected || isConnecting) return;
 
     try {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        throw new Error("Microphone access is not supported in this browser.");
+      }
+
       setIsConnecting(true);
       setAvatarState("thinking");
       setStatusText("Connecting realtime voice...");
 
       const sessionRes = await fetch(
-        `${API_BASE_URL}/realtime/session?language=${encodeURIComponent(language)}`
+        `${API_BASE_URL}/realtime/session?language=${encodeURIComponent(
+          language
+        )}`
       );
 
       if (!sessionRes.ok) {
-        const errorText = await sessionRes.text();
-        throw new Error(errorText || "Could not create realtime session.");
+        const errorText = await readErrorMessage(
+          sessionRes,
+          "Could not create realtime session."
+        );
+        throw new Error(errorText);
       }
 
       const sessionData = await sessionRes.json();
       const ephemeralKey = sessionData.value || sessionData.client_secret?.value;
 
       if (!ephemeralKey) {
-        throw new Error("No realtime client secret returned.");
+        throw new Error("No realtime client secret returned from backend.");
       }
 
       const pc = new RTCPeerConnection();
       pcRef.current = pc;
+
+      pc.onconnectionstatechange = () => {
+        if (
+          pc.connectionState === "failed" ||
+          pc.connectionState === "disconnected" ||
+          pc.connectionState === "closed"
+        ) {
+          if (mountedRef.current) {
+            setIsConnected(false);
+            setIsConnecting(false);
+            setAvatarState("idle");
+            setStatusText("Realtime disconnected.");
+          }
+        }
+      };
 
       const remoteAudio = new Audio();
       remoteAudio.autoplay = true;
@@ -289,8 +331,11 @@ export default function App() {
       });
 
       if (!sdpRes.ok) {
-        const errorText = await sdpRes.text();
-        throw new Error(errorText || "Realtime SDP request failed.");
+        const errorText = await readErrorMessage(
+          sdpRes,
+          "Realtime SDP request failed."
+        );
+        throw new Error(errorText);
       }
 
       const answerSdp = await sdpRes.text();
@@ -327,7 +372,12 @@ export default function App() {
   }
 
   useEffect(() => {
-    return () => stopRealtime();
+    mountedRef.current = true;
+
+    return () => {
+      mountedRef.current = false;
+      stopRealtime();
+    };
   }, []);
 
   const badgeLabel = isConnecting
