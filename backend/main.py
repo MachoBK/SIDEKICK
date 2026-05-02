@@ -70,7 +70,6 @@ def is_game_related(message: str) -> bool:
 def build_knowledge_context(query: str) -> str:
     results = query_index(query, k=5)
 
-    # cutoff weak matches
     results = [r for r in results if r.get("score", 0) >= 0.35]
 
     if not results:
@@ -161,12 +160,10 @@ GAME KNOWLEDGE:
     reply = res.choices[0].message.content.strip()
     reply_lower = reply.lower()
 
-    # basic safety
     unsafe = ["i don't know","not sure","maybe","probably"]
     if any(u in reply_lower for u in unsafe):
         return "I don't have that information yet."
 
-    # 🔥 FIXED HALLUCINATION GUARD
     if contains_entity_claim(reply):
         valid = False
 
@@ -187,9 +184,23 @@ GAME KNOWLEDGE:
 def root():
     return {"status": "SYNK running"}
 
+@app.get("/health")
+def health():
+    return {
+        "status": "ok",
+        "service": "SYNK backend",
+        "realtime_route": "enabled"
+    }
+
 @app.post("/chat")
 def chat(req: ChatRequest):
     try:
+        if not OPENAI_API_KEY:
+            raise HTTPException(
+                status_code=500,
+                detail="OPENAI_API_KEY is missing from backend environment variables."
+            )
+
         memory = conversation_memory.get(req.session_id, [])
 
         context_message = req.message
@@ -213,6 +224,8 @@ def chat(req: ChatRequest):
 
         return {"message": reply}
 
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
