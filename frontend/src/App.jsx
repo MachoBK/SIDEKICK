@@ -388,38 +388,39 @@ export default function App() {
 
       const answerSdp = await sdpRes.text();
 
-if (!mountedRef.current) {
-  return;
-}
+      if (!mountedRef.current) {
+        return;
+      }
 
-if (!pcRef.current || pcRef.current !== pc) {
-  return;
-}
+      if (!pcRef.current || pcRef.current !== pc) {
+        return;
+      }
 
-if (pc.signalingState === "closed") {
-  return;
-}
+      if (pc.signalingState === "closed") {
+        return;
+      }
 
-await pc.setRemoteDescription({
-  type: "answer",
-  sdp: answerSdp,
-});
+      await pc.setRemoteDescription({
+        type: "answer",
+        sdp: answerSdp,
+      });
     } catch (error) {
-  console.error("Realtime failed:", error);
-  setLatestAssistantText(`Realtime error: ${error.message}`);
-  setAvatarState("error");
-  setStatusText("Realtime failed.");
+      console.error("Realtime failed:", error);
+      setLatestAssistantText(`Realtime error: ${error.message}`);
+      setAvatarState("error");
+      setStatusText("Realtime failed.");
 
-  if (pcRef.current) {
-    stopRealtime();
-  } else {
-    setIsConnected(false);
-    setIsConnecting(false);
-    setMicMutedState(false);
-    setAvatarState("idle");
-    setStatusText("Ready.");
+      if (pcRef.current) {
+        stopRealtime();
+      } else {
+        setIsConnected(false);
+        setIsConnecting(false);
+        setMicMutedState(false);
+        setAvatarState("idle");
+        setStatusText("Ready.");
+      }
+    }
   }
-}
 
   function toggleRealtime() {
     if (isConnecting) return;
