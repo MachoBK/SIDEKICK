@@ -16,6 +16,7 @@ export default function App() {
   const [statusText, setStatusText] = useState("Ready.");
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [isMicMuted, setIsMicMuted] = useState(false);
 
   const [language, setLanguage] = useState("English");
   const [latestUserText, setLatestUserText] = useState("");
@@ -31,11 +32,37 @@ export default function App() {
   const micStreamRef = useRef(null);
   const remoteAudioRef = useRef(null);
   const mountedRef = useRef(true);
+  const micMutedRef = useRef(false);
+
+  function setMicMutedState(value) {
+    micMutedRef.current = value;
+    setIsMicMuted(value);
+  }
+
+  function getRealtimeStatusText() {
+    return micMutedRef.current
+      ? "Mic muted. SYNK can finish speaking."
+      : "Realtime on. Speak naturally.";
+  }
 
   async function readErrorMessage(res, fallback) {
     try {
       const text = await res.text();
-      return text || fallback;
+
+      if (!text) return fallback;
+
+      try {
+        const parsed = JSON.parse(text);
+        return (
+          parsed?.error?.message ||
+          parsed?.detail ||
+          parsed?.message ||
+          text ||
+          fallback
+        );
+      } catch {
+        return text;
+      }
     } catch {
       return fallback;
     }
@@ -136,7 +163,7 @@ export default function App() {
     utterance.onend = () => {
       if (isConnected) {
         setAvatarState("listening");
-        setStatusText("Realtime on. Speak naturally.");
+        setStatusText(getRealtimeStatusText());
       } else {
         setAvatarState("idle");
         setStatusText("Ready.");
@@ -181,6 +208,7 @@ export default function App() {
 
     setIsConnected(false);
     setIsConnecting(false);
+    setMicMutedState(false);
     setAvatarState("idle");
     setStatusText("Ready.");
   }
@@ -194,8 +222,10 @@ export default function App() {
       }
 
       setIsConnecting(true);
+      setMicMutedState(false);
       setAvatarState("thinking");
       setStatusText("Connecting realtime voice...");
+      setLatestAssistantText("");
 
       const sessionRes = await fetch(
         `${API_BASE_URL}/realtime/session?language=${encodeURIComponent(
@@ -212,9 +242,12 @@ export default function App() {
       }
 
       const sessionData = await sessionRes.json();
-      const ephemeralKey = sessionData.value || sessionData.client_secret?.value;
+
+      const ephemeralKey =
+        sessionData?.client_secret?.value || sessionData?.value;
 
       if (!ephemeralKey) {
+        console.error("Realtime session response:", sessionData);
         throw new Error("No realtime client secret returned from backend.");
       }
 
@@ -230,6 +263,7 @@ export default function App() {
           if (mountedRef.current) {
             setIsConnected(false);
             setIsConnecting(false);
+            setMicMutedState(false);
             setAvatarState("idle");
             setStatusText("Realtime disconnected.");
           }
@@ -242,6 +276,11 @@ export default function App() {
 
       pc.ontrack = (event) => {
         remoteAudio.srcObject = event.streams[0];
+
+        remoteAudio.play().catch(() => {
+          // Browser may block autoplay until user gesture.
+        });
+
         setAvatarState("talking");
         setStatusText("SYNK is speaking...");
       };
@@ -257,6 +296,7 @@ export default function App() {
       micStreamRef.current = micStream;
 
       micStream.getTracks().forEach((track) => {
+        track.enabled = true;
         pc.addTrack(track, micStream);
       });
 
@@ -266,6 +306,7 @@ export default function App() {
       dc.onopen = () => {
         setIsConnected(true);
         setIsConnecting(false);
+        setMicMutedState(false);
         setAvatarState("listening");
         setStatusText("Realtime on. Speak naturally.");
       };
@@ -274,7 +315,10 @@ export default function App() {
         try {
           const msg = JSON.parse(event.data);
 
-          if (msg.type === "conversation.item.input_audio_transcription.completed") {
+          if (
+            msg.type ===
+            "conversation.item.input_audio_transcription.completed"
+          ) {
             if (msg.transcript) setLatestUserText(msg.transcript);
           }
 
@@ -290,9 +334,12 @@ export default function App() {
             }
           }
 
-          if (msg.type === "response.audio.done" || msg.type === "response.done") {
+          if (
+            msg.type === "response.audio.done" ||
+            msg.type === "response.done"
+          ) {
             setAvatarState("listening");
-            setStatusText("Realtime on. Speak naturally.");
+            setStatusText(getRealtimeStatusText());
           }
 
           if (msg.type === "error") {
@@ -316,6 +363,7 @@ export default function App() {
       dc.onclose = () => {
         setIsConnected(false);
         setIsConnecting(false);
+        setMicMutedState(false);
       };
 
       const offer = await pc.createOffer();
@@ -340,24 +388,61 @@ export default function App() {
 
       const answerSdp = await sdpRes.text();
 
-      await pc.setRemoteDescription({
-        type: "answer",
-        sdp: answerSdp,
-      });
+if (!mountedRef.current) {
+  return;
+}
+
+if (!pcRef.current || pcRef.current !== pc) {
+  return;
+}
+
+if (pc.signalingState === "closed") {
+  return;
+}
+
+await pc.setRemoteDescription({
+  type: "answer",
+  sdp: answerSdp,
+});
     } catch (error) {
-      console.error("Realtime failed:", error);
-      setLatestAssistantText(`Realtime error: ${error.message}`);
-      setAvatarState("error");
-      setStatusText("Realtime failed.");
-      stopRealtime();
-    }
+  console.error("Realtime failed:", error);
+  setLatestAssistantText(`Realtime error: ${error.message}`);
+  setAvatarState("error");
+  setStatusText("Realtime failed.");
+
+  if (pcRef.current) {
+    stopRealtime();
+  } else {
+    setIsConnected(false);
+    setIsConnecting(false);
+    setMicMutedState(false);
+    setAvatarState("idle");
+    setStatusText("Ready.");
   }
+}
 
   function toggleRealtime() {
-    if (isConnected || isConnecting) {
-      stopRealtime();
-    } else {
+    if (isConnecting) return;
+
+    if (!isConnected) {
       startRealtime();
+      return;
+    }
+
+    const nextMutedState = !micMutedRef.current;
+
+    if (micStreamRef.current) {
+      micStreamRef.current.getAudioTracks().forEach((track) => {
+        track.enabled = !nextMutedState;
+      });
+    }
+
+    setMicMutedState(nextMutedState);
+
+    if (nextMutedState) {
+      setStatusText("Mic muted. SYNK can finish speaking.");
+    } else {
+      setStatusText("Realtime on. Speak naturally.");
     }
   }
 
@@ -382,6 +467,8 @@ export default function App() {
 
   const badgeLabel = isConnecting
     ? "Connecting"
+    : isMicMuted
+    ? "Muted"
     : isConnected
     ? "Realtime"
     : avatarState === "talking"
@@ -768,7 +855,7 @@ export default function App() {
             0 0 32px rgba(0, 225, 255, 0.55),
             0 0 90px rgba(0, 125, 255, 0.24),
             inset 0 0 30px rgba(0, 225, 255, 0.15);
-          transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+          transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, opacity 180ms ease;
         }
 
         .synk-mic-button::before {
@@ -799,6 +886,19 @@ export default function App() {
             0 0 44px rgba(255, 95, 205, 0.45),
             0 0 120px rgba(0, 225, 255, 0.38),
             inset 0 0 38px rgba(255, 95, 205, 0.16);
+        }
+
+        .synk-mic-button.muted {
+          opacity: 0.55;
+          border-color: rgba(180, 220, 255, 0.35);
+          box-shadow:
+            0 0 18px rgba(0, 225, 255, 0.18),
+            inset 0 0 22px rgba(0, 225, 255, 0.08);
+        }
+
+        .synk-mic-button.muted::before {
+          opacity: 0.18;
+          animation-duration: 6s;
         }
 
         .synk-mic-icon {
@@ -920,7 +1020,11 @@ export default function App() {
           value={language}
           onChange={handleLanguageChange}
           disabled={isConnected || isConnecting}
-          title={isConnected ? "Stop realtime voice before changing language" : "Choose language"}
+          title={
+            isConnected
+              ? "Stop realtime voice before changing language"
+              : "Choose language"
+          }
         >
           {Object.keys(LANGUAGES).map((lang) => (
             <option key={lang} value={lang}>
@@ -989,10 +1093,24 @@ export default function App() {
 
           <div className="synk-mic-wrap">
             <button
-              className={`synk-mic-button ${isConnected ? "active" : ""}`}
+              className={`synk-mic-button ${isConnected ? "active" : ""} ${
+                isMicMuted ? "muted" : ""
+              }`}
               onClick={toggleRealtime}
-              aria-label={isConnected ? "Stop realtime voice" : "Start realtime voice"}
-              title={isConnected ? "Stop realtime voice" : "Start realtime voice"}
+              aria-label={
+                !isConnected
+                  ? "Start realtime voice"
+                  : isMicMuted
+                  ? "Unmute mic"
+                  : "Mute mic"
+              }
+              title={
+                !isConnected
+                  ? "Start realtime voice"
+                  : isMicMuted
+                  ? "Unmute mic"
+                  : "Mute mic"
+              }
             >
               <svg
                 className="synk-mic-icon"
