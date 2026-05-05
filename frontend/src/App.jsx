@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import SynkWaterBackground from "./components/SynkWaterBackground";
 
-const API_BASE_URL = "https://synk-backend.onrender.com";
+const API_BASE_URL = "https://sidekick-p0n2.onrender.com";
 const ENABLE_TEXT_TO_SPEECH = false;
 
 const LANGUAGES = {

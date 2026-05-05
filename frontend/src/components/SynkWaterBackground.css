@@ -35,7 +35,7 @@
   inset: 0;
   background:
     repeating-radial-gradient(
-      circle at 50% 48%,
+      circle at 50% 45%,
       rgba(0, 225, 255, 0.12) 0px,
       rgba(0, 225, 255, 0.04) 2px,
       transparent 7px,
@@ -109,14 +109,18 @@
 .synk-ripple-core {
   position: absolute;
   z-index: 2;
-  top: 47%;
+
+  top: 39%;
   left: 50%;
-  width: min(540px, 80vw);
+
+  width: min(480px, 70vw);
   aspect-ratio: 1;
+
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background:
-    radial-gradient(circle, rgba(180, 250, 255, 0.18), transparent 28%),
+    background:
+  radial-gradient(circle, rgba(180, 250, 255, 0.14), transparent 28%),
     repeating-radial-gradient(
       circle,
       rgba(0, 225, 255, 0.2) 0px,
@@ -128,7 +132,7 @@
     0 0 100px rgba(0, 225, 255, 0.16),
     inset 0 0 90px rgba(0, 225, 255, 0.06);
   opacity: 0.75;
-  animation: corePulse 5.5s ease-in-out infinite;
+  animation: corePulse 6.5s ease-in-out infinite;
 }
 
 .synk-flow-line {
@@ -150,122 +154,62 @@
 }
 
 .line-one {
-  top: 28%;
+  top: 40%;
   transform: rotate(58deg);
   animation: linePulse 5s ease-in-out infinite;
 }
 
 .line-two {
-  top: 20%;
+  top: 38%;
   transform: rotate(-62deg);
   animation: linePulse 6s ease-in-out infinite 1s;
 }
 
 .line-three {
-  top: 18%;
+  top: 36%;
   transform: rotate(4deg);
   animation: linePulse 7s ease-in-out infinite 2s;
 }
 
 @keyframes waterRotate {
-  from {
-    transform: rotate(0deg) scale(1.1);
-  }
-
-  to {
-    transform: rotate(360deg) scale(1.1);
-  }
+  from { transform: rotate(0deg) scale(1.1); }
+  to { transform: rotate(360deg) scale(1.1); }
 }
 
 @keyframes rippleExpand {
-  0%,
-  100% {
-    transform: scale(0.96);
-    opacity: 0.18;
-  }
-
-  50% {
-    transform: scale(1.04);
-    opacity: 0.32;
-  }
+  0%,100% { transform: scale(0.94); opacity: 0.16; }
+  50% { transform: scale(1.02); opacity: 0.28; }
 }
 
 @keyframes gridDrift {
-  from {
-    background-position: 0 0;
-  }
-
-  to {
-    background-position: 0 70px;
-  }
+  from { background-position: 0 0; }
+  to { background-position: 0 70px; }
 }
-
 @keyframes corePulse {
-  0%,
-  100% {
-    transform: translate(-50%, -50%) scale(0.94);
-    opacity: 0.48;
-  }
-
-  50% {
-    transform: translate(-50%, -50%) scale(1.08);
-    opacity: 0.85;
-  }
+  0%,100% { transform: translate(-50%, -50%) scale(0.92); opacity: 0.44; }
+  50% { transform: translate(-50%, -50%) scale(1.04); opacity: 0.78; }
 }
-
 @keyframes linePulse {
-  0%,
-  100% {
-    opacity: 0.14;
-    filter: blur(2px);
-  }
-
-  50% {
-    opacity: 0.6;
-    filter: blur(0.5px);
-  }
+  0%,100% { opacity: 0.14; filter: blur(2px); }
+  50% { opacity: 0.6; filter: blur(0.5px); }
 }
 
 @keyframes floatOne {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  50% {
-    transform: translate(80px, 60px) scale(1.2);
-  }
+  0%,100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(80px,60px) scale(1.2); }
 }
 
 @keyframes floatTwo {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  50% {
-    transform: translate(-90px, 70px) scale(1.18);
-  }
+  0%,100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(-90px,70px) scale(1.18); }
 }
 
 @keyframes floatThree {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  50% {
-    transform: translate(70px, -90px) scale(1.15);
-  }
+  0%,100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(70px,-90px) scale(1.15); }
 }
 
 @keyframes floatFour {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  50% {
-    transform: translate(-70px, -80px) scale(1.22);
-  }
+  0%,100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(-70px,-80px) scale(1.22); }
 }
