@@ -48,6 +48,7 @@ class ChatRequest(BaseModel):
     language: str = "English"
     session_id: str = "default"
 
+
 # =========================
 # GAME FILTER
 # =========================
@@ -55,14 +56,15 @@ def is_game_related(message: str) -> bool:
     msg = message.lower()
 
     keywords = [
-        "game","quest","mission","boss","character","npc","weapon","armor",
-        "skill","level","map","location","faction","story","lore","enemy",
-        "combat","reward","item","guide","walkthrough",
-        "crimson","desert","kliff","macduff","hernand",
-        "battalion","army","clan","group"
+        "game", "quest", "mission", "boss", "character", "npc", "weapon",
+        "armor", "skill", "level", "map", "location", "faction", "story",
+        "lore", "enemy", "combat", "reward", "item", "guide", "walkthrough",
+        "crimson", "desert", "kliff", "macduff", "hernand", "battalion",
+        "army", "clan", "group"
     ]
 
     return any(k in msg for k in keywords)
+
 
 # =========================
 # KNOWLEDGE
@@ -102,24 +104,30 @@ SCORE: {item.get('score'):.3f}
 
     return "\n\n---\n\n".join(parts)
 
+
 def extract_allowed_names(knowledge: str):
     names = []
+
     for line in knowledge.splitlines():
         if ":" in line:
             key, value = line.split(":", 1)
+
             if key.lower() in ["name", "title"]:
                 names.append(value.strip().lower())
+
     return names
+
 
 def contains_entity_claim(reply: str):
     keywords = [
-        "battalion","faction","group","army","clan",
-        "guild","organization","order","tribe","crew",
-        "unit","force","company","squad","legion",
-        "leader","boss","character"
+        "battalion", "faction", "group", "army", "clan", "guild",
+        "organization", "order", "tribe", "crew", "unit", "force",
+        "company", "squad", "legion", "leader", "boss", "character"
     ]
+
     r = reply.lower()
     return any(k in r for k in keywords)
+
 
 # =========================
 # AI RESPONSE
@@ -160,7 +168,8 @@ GAME KNOWLEDGE:
     reply = res.choices[0].message.content.strip()
     reply_lower = reply.lower()
 
-    unsafe = ["i don't know","not sure","maybe","probably"]
+    unsafe = ["i don't know", "not sure", "maybe", "probably"]
+
     if any(u in reply_lower for u in unsafe):
         return "I don't have that information yet."
 
@@ -177,6 +186,7 @@ GAME KNOWLEDGE:
 
     return reply
 
+
 # =========================
 # ROUTES
 # =========================
@@ -184,13 +194,15 @@ GAME KNOWLEDGE:
 def root():
     return {"status": "SYNK running"}
 
+
 @app.get("/health")
 def health():
     return {
         "status": "ok",
         "service": "SYNK backend",
-        "realtime_route": "enabled"
+        "realtime_route": "enabled",
     }
+
 
 @app.post("/chat")
 def chat(req: ChatRequest):
@@ -198,11 +210,10 @@ def chat(req: ChatRequest):
         if not OPENAI_API_KEY:
             raise HTTPException(
                 status_code=500,
-                detail="OPENAI_API_KEY is missing from backend environment variables."
+                detail="OPENAI_API_KEY is missing from backend environment variables.",
             )
 
         memory = conversation_memory.get(req.session_id, [])
-
         context_message = req.message
 
         if memory:
@@ -210,13 +221,14 @@ def chat(req: ChatRequest):
                 f"User: {m['user']}\nSYNK: {m['assistant']}"
                 for m in memory[-3:]
             ])
+
             context_message = f"{history}\nUser: {req.message}"
 
         reply = generate_response(
             context_message,
             req.personality,
             req.mode,
-            req.language
+            req.language,
         )
 
         memory.append({"user": req.message, "assistant": reply})
@@ -229,13 +241,17 @@ def chat(req: ChatRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
+# =========================
+# REALTIME ROUTE - GA CLIENT SECRET
+# =========================
 @app.get("/realtime/session")
 async def create_realtime_session(language: str = "English"):
     try:
         if not OPENAI_API_KEY:
             raise HTTPException(
                 status_code=500,
-                detail="OPENAI_API_KEY is missing from backend environment variables."
+                detail="OPENAI_API_KEY is missing from backend environment variables.",
             )
 
         instructions = f"""
@@ -252,22 +268,36 @@ RULES:
 
         async with httpx.AsyncClient(timeout=30.0) as http_client:
             response = await http_client.post(
-                "https://api.openai.com/v1/realtime/sessions",
+                "https://api.openai.com/v1/realtime/client_secrets",
                 headers={
                     "Authorization": f"Bearer {OPENAI_API_KEY}",
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": "gpt-4o-realtime-preview",
-                    "voice": "alloy",
-                    "instructions": instructions,
+                    "session": {
+                        "type": "realtime",
+                        "model": "gpt-realtime-mini",
+                        "instructions": instructions,
+                        "audio": {
+                            "input": {
+                                "turn_detection": {
+                                    "type": "server_vad",
+                                    "create_response": True,
+                                    "interrupt_response": True,
+                                }
+                            },
+                            "output": {
+                                "voice": "alloy",
+                            },
+                        },
+                    }
                 },
             )
 
         if response.status_code >= 400:
             raise HTTPException(
                 status_code=response.status_code,
-                detail=response.text
+                detail=response.text,
             )
 
         return response.json()
