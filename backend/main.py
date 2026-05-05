@@ -287,7 +287,7 @@ RULES:
                                 }
                             },
                             "output": {
-                                "voice": "alloy",
+                                "voice": "shimmer",
                             },
                         },
                     }
