@@ -138,26 +138,36 @@ def generate_response(message: str, personality: str, mode: str, language: str):
 
     knowledge = build_knowledge_context(message)
 
-    if not knowledge:
-        return "I don't have that information yet."
-
-    allowed_names = extract_allowed_names(knowledge)
-
-    system_prompt = f"""
+    if knowledge:
+        system_prompt = f"""
 You are SYNK, a video game AI.
 
 RULES:
-- ONLY use GAME KNOWLEDGE
-- NEVER invent names
-- If unsure → say: "I don't have that information yet."
+- Use GAME KNOWLEDGE first.
+- If GAME KNOWLEDGE answers the question, use it.
+- Do not contradict GAME KNOWLEDGE.
+- If GAME KNOWLEDGE is incomplete, you may use general video game knowledge.
+- Never invent fake names, factions, characters, bosses, items, or locations.
+- If unsure, say: "I don't have that information yet."
+- Answer in {language}.
 
 GAME KNOWLEDGE:
 {knowledge}
 """
+    else:
+        system_prompt = f"""
+You are SYNK, a video game AI.
+
+RULES:
+- You may use general video game knowledge.
+- Never invent fake names, factions, characters, bosses, items, or locations.
+- If unsure, say: "I don't have that information yet."
+- Answer in {language}.
+"""
 
     res = client.chat.completions.create(
         model="gpt-4o-mini",
-        temperature=0,
+        temperature=0.2,
         max_tokens=300,
         messages=[
             {"role": "system", "content": system_prompt},
@@ -168,21 +178,10 @@ GAME KNOWLEDGE:
     reply = res.choices[0].message.content.strip()
     reply_lower = reply.lower()
 
-    unsafe = ["i don't know", "not sure", "maybe", "probably"]
+    unsafe = ["not sure", "maybe", "probably", "i think"]
 
     if any(u in reply_lower for u in unsafe):
         return "I don't have that information yet."
-
-    if contains_entity_claim(reply):
-        valid = False
-
-        for name in allowed_names:
-            if name in reply_lower:
-                valid = True
-                break
-
-        if not valid:
-            return "I don't have that information yet."
 
     return reply
 
