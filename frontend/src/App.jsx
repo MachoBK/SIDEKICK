@@ -913,7 +913,25 @@ export default function App() {
           font-size: 0.98rem;
           text-align: center;
         }
+         .synk-end-voice-button {
+  border: 1px solid rgba(138, 239, 255, 0.35);
+  background: rgba(2, 10, 24, 0.45);
+  color: #d3f2ff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 0 18px rgba(0, 225, 255, 0.12),
+    inset 0 0 14px rgba(0, 225, 255, 0.04);
+  transition: transform 180ms ease, opacity 180ms ease;
+}
 
+.synk-end-voice-button:hover {
+  transform: scale(1.04);
+}
         .synk-badge {
           position: absolute;
           right: 28px;
@@ -1130,6 +1148,11 @@ export default function App() {
             </button>
 
             <div className="synk-status">{statusText}</div>
+             {isConnected && (
+              <button className="synk-end-voice-button" onClick={stopRealtime}>
+                End Voice
+              </button>
+        )}
           </div>
         </div>
       </main>
